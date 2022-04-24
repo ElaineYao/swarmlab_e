@@ -184,11 +184,19 @@ classdef Swarm < handle
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function colors = get_colors(self)
-            colors = zeros(3, self.nb_agents);
-
-            for i = 1:self.nb_agents
-                colors(:, i) = self.drones(i).color;
-            end
+            colors = [255 0 0;
+                      0 0 255;
+                      0 255 0;
+                      255 139 6;
+                      255 6 255]./255;
+             colors = colors.'
+%              disp(colors);
+%             colors = zeros(3, self.nb_agents);
+%             
+%             for i = 1:self.nb_agents
+%                 colors(:, i) = self.drones(i).color;
+%                 disp(colors)
+%             end
 
         end
 
