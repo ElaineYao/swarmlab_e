@@ -196,7 +196,7 @@ classdef Swarm < handle
         function update_state(self, wind, time)
 
             for i = 1:self.nb_agents
-                self.drones(i).update_state(wind, time);
+                self.drones(i).update_state(wind, time, i);
             end
         end
 

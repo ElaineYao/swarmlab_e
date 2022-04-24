@@ -125,6 +125,7 @@ classdef Drone < handle
         vel_xyz     % vx, vy, vz
         attitude    % phi, theta, psi
         rates       % p, q, r
+        real_pos_ned % real pn, pe, pd 
         
         % State history
         pos_ned_history
@@ -235,6 +236,8 @@ classdef Drone < handle
             Drone.vel_xyz = zeros(3, 1);
             Drone.attitude = zeros(3, 1);
             Drone.rates = zeros(3, 1);
+            Drone.real_pos_ned = zeros(3, 1);
+            
             
             Drone.pos_ned_history = [];
             Drone.vel_xyz_history = [];
@@ -282,6 +285,7 @@ classdef Drone < handle
             % on the map
             self.pos_ned = map_size .* rand(3, 1);
             self.pos_ned(3) = -self.pos_ned(3); % h = -pd
+            self.real_pos_ned = self.pos_ned;
             % Update pos_ned_history
             if isempty(self.pos_ned_history)
                 self.pos_ned_history = self.pos_ned';
@@ -294,6 +298,7 @@ classdef Drone < handle
         function set_pos(self, position_ned)
             % SET_POS: Set the position of the drone in the NED frame
             self.pos_ned = position_ned;
+            self.real_pos_ned = position_ned;
             % Update pos_ned_history
             if isempty(self.pos_ned_history)
                 self.pos_ned_history = self.pos_ned';
@@ -340,7 +345,7 @@ classdef Drone < handle
         end
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function update_state(self, wind, time)
+        function update_state(self, wind, time, i_drone)
             % UPDATE_STATE: Compute the new drone state
             
             self.update_sensor_measurements();
@@ -369,7 +374,55 @@ classdef Drone < handle
                 % inertial frame. Only usable with the velocity controller.
                 
                 self.vel_xyz = self.command(2:4);
-                self.pos_ned = self.pos_ned + self.vel_xyz * self.p_sim.dt;
+%                 self.pos_ned = self.pos_ned + self.vel_xyz * self.p_sim.dt;
+%                 rng('shuffle');
+%                 rand('twister',mod(floor(now*8640000),2^31-1));
+% ----------
+%                 real gps pos
+                self.real_pos_ned = self.real_pos_ned + self.vel_xyz * self.p_sim.dt;
+%                 gps pos when attacked
+                spoof_pos = self.pos_ned + self.vel_xyz * self.p_sim.dt;
+%                 file content : xxxxx , each digit is 0/1, indicating
+%                 attacking or not for a certain drone
+                fileID = fopen('/media/EDrive/swarmlab_e/flag.txt', 'r');
+                flag = fscanf(fileID, '%f');
+                fclose(fileID);
+%                 parse file content
+                idx = find(flag);
+%                 1st drone
+                
+                
+                if ismember(i_drone, idx) 
+%                     noise = [0.5*rand(2,1);0];
+                    fpath = strcat('/media/EDrive/swarmlab_e/n', num2str(i_drone));
+                    fpath = strcat(fpath, '.txt');
+                    disp(fpath)
+                    fileid = fopen(fpath, 'r');
+                    noise = fscanf(fileid, '%f');
+                    fclose(fileid);
+                    self.pos_ned = spoof_pos+noise;
+                else
+                    self.pos_ned = self.real_pos_ned;
+                end
+%                 record the position for each drone
+                switch i_drone
+                    case 1
+                        dlmwrite('pos_ned_1.csv',self.pos_ned,'delimiter',',','-append');
+                    case 2
+                        dlmwrite('pos_ned_2.csv',self.pos_ned,'delimiter',',','-append');
+                    case 3
+                        dlmwrite('pos_ned_3.csv',self.pos_ned,'delimiter',',','-append');
+                    case 4
+                        dlmwrite('pos_ned_4.csv',self.pos_ned,'delimiter',',','-append');
+                    case 5
+                        dlmwrite('pos_ned_5.csv',self.pos_ned,'delimiter',',','-append');
+                end
+% ----------
+                    
+%                 disp(self.pos_ned);
+%                 disp(size(self.pos_ned));
+%                 dlmwrite('noise.csv',noise,'delimiter',',','-append');
+%                 dlmwrite('pos_ned_noi.csv',self.pos_ned,'delimiter',',','-append');
                 self.attitude(3) = self.command(1); % to plot drone psi angle
                 
                 % Update pos_ned_history

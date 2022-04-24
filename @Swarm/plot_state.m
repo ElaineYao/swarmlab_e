@@ -132,6 +132,7 @@ function plot_state(self, time, end_time, iter, period, ...
 
             if N > 1
                 graph_mean_min_max(iter, time, d_mean, d_min, d_max, 'd_{agents} [m]', d_mm_handle);
+%                 dlmwrite('dis_agents.csv',d_min,'delimiter',',','-append');
                 graph_thr(iter, time, 2 * r_agent, ag_thr_handle);
 
                 graph_y(iter, time, min_dist_obs, 'd_{obstacles} [m]', dist_obs_handle);
@@ -142,6 +143,8 @@ function plot_state(self, time, end_time, iter, period, ...
 
             graph_y(iter, time, n_agent_collisions, 'c_{agents}', ag_col_handle);
             graph_y(iter, time, n_obs_collisions, 'c_{obstacles}', obs_col_handle);
+%             dlmwrite('n_agent_collisions.csv',n_agent_collisions,'delimiter',',','-append');
+%             dlmwrite('n_obs_collisions.csv',n_obs_collisions,'delimiter',',','-append');
         end
         
         % Save figures
