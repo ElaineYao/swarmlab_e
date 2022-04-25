@@ -189,8 +189,7 @@ classdef Swarm < handle
                       0 255 0;
                       255 139 6;
                       255 6 255]./255;
-             colors = colors.'
-%              disp(colors);
+             colors = colors.';
 %             colors = zeros(3, self.nb_agents);
 %             
 %             for i = 1:self.nb_agents
