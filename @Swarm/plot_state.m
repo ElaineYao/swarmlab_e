@@ -132,7 +132,8 @@ function plot_state(self, time, end_time, iter, period, ...
 
             if N > 1
                 graph_mean_min_max(iter, time, d_mean, d_min, d_max, 'd_{agents} [m]', d_mm_handle);
-                dlmwrite('dis_agents.csv',d_min,'delimiter',',','-append');
+                time_dmin = [time, d_min];
+                dlmwrite('dis_agents.csv',time_dmin,'delimiter',',','-append');
                 graph_thr(iter, time, 2 * r_agent, ag_thr_handle);
 
                 graph_y(iter, time, min_dist_obs, 'd_{obstacles} [m]', dist_obs_handle);

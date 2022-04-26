@@ -402,28 +402,29 @@ classdef Drone < handle
                     fclose(fileid);
                     self.pos_ned = spoof_pos+noise;
                 else
-                    if (((time>28) && (i_drone==3))||((time>28) && (i_drone==5)))
+                    if ((time>35.5) && (i_drone==3))
      
-                        vel = [self.vel_xyz(1:2,:);0];
-                        self.pos_ned = spoof_pos - vel * self.p_sim.dt;
+                        self.pos_ned = [83.782;153.59;-55.345];
+                        
                     else
                     self.pos_ned = self.real_pos_ned;
                     end
                 end
+% ----------
 %                 record the position for each drone
+                pos_time = [time, self.pos_ned.'];
                 switch i_drone
                     case 1
-                        dlmwrite('pos_ned_1.csv',self.pos_ned,'delimiter',',','-append');
+                        dlmwrite('pos_ned_1.csv',pos_time,'delimiter',',','-append');
                     case 2
-                        dlmwrite('pos_ned_2.csv',self.pos_ned,'delimiter',',','-append');
+                        dlmwrite('pos_ned_2.csv',pos_time,'delimiter',',','-append');
                     case 3
-                        dlmwrite('pos_ned_3.csv',self.pos_ned,'delimiter',',','-append');
+                        dlmwrite('pos_ned_3.csv',pos_time,'delimiter',',','-append');
                     case 4
-                        dlmwrite('pos_ned_4.csv',self.pos_ned,'delimiter',',','-append');
+                        dlmwrite('pos_ned_4.csv',pos_time,'delimiter',',','-append');
                     case 5
-                        dlmwrite('pos_ned_5.csv',self.pos_ned,'delimiter',',','-append');
+                        dlmwrite('pos_ned_5.csv',pos_time,'delimiter',',','-append');
                 end
-% ----------
                     
 %                 disp(self.pos_ned);
 %                 disp(size(self.pos_ned));

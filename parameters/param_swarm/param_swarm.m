@@ -133,7 +133,14 @@ p_swarm.V = 0; % [m/s]
 p_swarm.seed = 5;
 rng(p_swarm.seed);
 
-p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * rand(3,p_swarm.nb_agents);
+% ---------Elaine --------
+init_pos = rand(3,p_swarm.nb_agents);
+init_pos = [init_pos(1:2,:);0.6*ones(1,p_swarm.nb_agents)];
+% p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * rand(3,p_swarm.nb_agents);
+p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
+% disp('init_pos');
+% disp(init_pos);
+% disp(p_swarm.Pos0);
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
 
 
