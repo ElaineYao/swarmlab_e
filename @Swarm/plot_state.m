@@ -135,8 +135,10 @@ function plot_state(self, time, end_time, iter, period, ...
                 time_dmin = [time, d_min];
                 dlmwrite('dis_agents.csv',time_dmin,'delimiter',',','-append');
                 graph_thr(iter, time, 2 * r_agent, ag_thr_handle);
-
+                
+                time_obs = [time, min_dist_obs];
                 graph_y(iter, time, min_dist_obs, 'd_{obstacles} [m]', dist_obs_handle);
+                dlmwrite('dis_obs.csv',time_obs,'delimiter',',','-append');
                 graph_thr(iter, time, r_agent, obs_thr_handle);
             end
 

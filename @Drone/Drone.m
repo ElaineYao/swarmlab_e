@@ -374,7 +374,7 @@ classdef Drone < handle
                 % inertial frame. Only usable with the velocity controller.
                 
                 self.vel_xyz = self.command(2:4);
-                self.pos_ned = self.pos_ned + self.vel_xyz * self.p_sim.dt;
+%                 self.pos_ned = self.pos_ned + self.vel_xyz * self.p_sim.dt;
 %                 rng('shuffle');
 %                 rand('twister',mod(floor(now*8640000),2^31-1));
 % ----------
@@ -402,28 +402,39 @@ classdef Drone < handle
                     fclose(fileid);
                     self.pos_ned = spoof_pos+noise;
                 else
-                    if ((time>35.5) && (i_drone==3))
-     
-                        self.pos_ned = [83.782;153.59;-55.345];
-                        
-                    else
-                    self.pos_ned = self.real_pos_ned;
-                    end
+                    % ------------------
+%                     if ((time>21) && (i_drone==2))
+%                         % keep the y-axis of the blue one
+%                         self.pos_ned = [self.real_pos_ned(1);151.99;self.real_pos_ned(3)];
+%                     elseif ((time>21) && (i_drone==4))
+%                         self.pos_ned = [self.real_pos_ned(1);149.22;self.real_pos_ned(3)];
+%                     else
+%                     self.pos_ned = self.real_pos_ned;
+%                     end
+                    % ------------------
+%                     self.pos_ned = self.real_pos_ned;
+                    self.pos_ned = spoof_pos;
                 end
 % ----------
 %                 record the position for each drone
                 pos_time = [time, self.pos_ned.'];
+                vel_time = [time, (self.vel_xyz * self.p_sim.dt).'];
                 switch i_drone
                     case 1
                         dlmwrite('pos_ned_1.csv',pos_time,'delimiter',',','-append');
+                        dlmwrite('vel_xyzt_1.csv',vel_time,'delimiter',',','-append');
                     case 2
                         dlmwrite('pos_ned_2.csv',pos_time,'delimiter',',','-append');
+                        dlmwrite('vel_xyzt_2.csv',vel_time,'delimiter',',','-append');
                     case 3
                         dlmwrite('pos_ned_3.csv',pos_time,'delimiter',',','-append');
+                        dlmwrite('vel_xyzt_3.csv',vel_time,'delimiter',',','-append');
                     case 4
                         dlmwrite('pos_ned_4.csv',pos_time,'delimiter',',','-append');
+                        dlmwrite('vel_xyzt_4.csv',vel_time,'delimiter',',','-append');
                     case 5
                         dlmwrite('pos_ned_5.csv',pos_time,'delimiter',',','-append');
+                        dlmwrite('vel_xyzt_5.csv',vel_time,'delimiter',',','-append');
                 end
                     
 %                 disp(self.pos_ned);
