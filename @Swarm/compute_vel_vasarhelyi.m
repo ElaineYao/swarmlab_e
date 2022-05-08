@@ -1,4 +1,6 @@
 function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_agent, dt)
+    % ------- dt = 0.01, r_agent = 0.5, self -> Swarm, p_swarm -> struct
+    
     % VASARHELYI SWARM ALGORITHM
     % This is an implementation of the Vasarhelyi algorithm. It allows the
     % navigation of a swarm of agents in presence of obstacles and walls.
@@ -20,23 +22,23 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     
     
     %% Initialize variables
-
-    pos = self.get_pos_ned();
-    vel = self.get_vel_ned();
+    
+    pos = self.get_pos_ned(); % 3*5 double
+    vel = self.get_vel_ned(); % 3*5 double
 
     % Initialize variables
-    nb_agents = self.nb_agents;
-    M = zeros(nb_agents, nb_agents);    % Neighborhood matrix
-    dist_mat = zeros(nb_agents, nb_agents);    % Distance matrix
-    vel_rep = zeros(3, nb_agents);      % Repulsion velocity
-    vel_fric = zeros(3, nb_agents);     % Velocity matching velocity
-    vel_wall = zeros(3, nb_agents);     % Arena repulsion velocity
-    vel_obs = zeros(3, nb_agents);      % Obstacle repulsion velocity
-    vel_command = zeros(3, nb_agents);  % Total commanded velocity
+    nb_agents = self.nb_agents; % 5
+    M = zeros(nb_agents, nb_agents);    % Neighborhood matrix 5*5 double
+    dist_mat = zeros(nb_agents, nb_agents);    % Distance matrix 5*5 double
+    vel_rep = zeros(3, nb_agents);      % Repulsion velocity 3*5 double
+    vel_fric = zeros(3, nb_agents);     % Velocity matching velocity  3*5 double
+    vel_wall = zeros(3, nb_agents);     % Arena repulsion velocity  3*5 double
+    vel_obs = zeros(3, nb_agents);      % Obstacle repulsion velocity  3*5 double
+    vel_command = zeros(3, nb_agents);  % Total commanded velocity  3*5 double
     
-    nb_agent_collisions = 0; % Nb of collisions among agents
+    nb_agent_collisions = 0; % Nb of collisions among agents  
     nb_obs_collisions = 0; % Nb of collisions against obstacles
-    min_dist_obs = 20;
+    min_dist_obs = 20; % Minimal distance between any agent and the obstacle. Set it to a relatively high value in the beginning
 
     
     %% Compute velocity commands
@@ -47,29 +49,33 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
         %% Find neighbors
         
         % Compute agent-agent distance matrix
-        p_rel = pos - pos(:, agent);
-        dist = sqrt(sum((p_rel.^2), 1));
-        dist_mat(agent, :) = dist;
+        p_rel = pos - pos(:, agent); % substract the agent'th column -> get the relative coord
+        dist = sqrt(sum((p_rel.^2), 1)); % sum(A, 1)-> sum in column 1*5 -> every column is the relative absolute dist to agent
+        dist_mat(agent, :) = dist; % dist matrix ->every row is the relative dist for each agent
 
         % Define neighbours list
-        neig_list = (1:nb_agents)';
-        neig_list = neig_list(dist ~= 0);
+        neig_list = (1:nb_agents)'; % 5*1 => 1; 2; 3; 4; 5
+        neig_list = neig_list(dist ~= 0); % for index = 1, dist = 0, so neig_list = 2; 3; 4; 5 (get the neighbor list)
 
         % Count collisions
-        nb_agent_collisions = nb_agent_collisions + sum(dist < 2 * r_agent) - 1;
+        % r_agent is the radius of two agents. if the dist is smaller than
+        % 2*0.5 then collision happens. -1 is bc minus itself's dist
+        
+        nb_agent_collisions = nb_agent_collisions + sum(dist < 2 * r_agent) - 1; 
 
         % Initialize number of neighbours
         nb_neig = nb_agents - 1;
 
         % Constraint on neighborhood given by the euclidean distance
-        if isfield(p_swarm, 'r')
-            neig_list = neig_list(dist(neig_list) < p_swarm.r);
-            nb_neig = length(neig_list);
+        if isfield(p_swarm, 'r') % determine if a field is in the struct 
+            % No place to create p_swarm???
+            neig_list = neig_list(dist(neig_list) < p_swarm.r); % p_swarm_r = 150, 2;3;4;5, perhaps if the dist > r, we don't think it's part of the swarm
+            nb_neig = length(neig_list); % 4
         end
 
         % Constraint on neighborhood given by the topological distance
-        if isfield(p_swarm, 'max_neig')
-            if nb_neig > p_swarm.max_neig
+        if isfield(p_swarm, 'max_neig') % max_neig = 10
+            if nb_neig > p_swarm.max_neig % since nb_neig = 4, I don't think it'll go into this branch
                 [~, idx] = sort(dist(neig_list));
                 neig_list = neig_list(idx(1:p_swarm.max_neig));
                 nb_neig = p_swarm.max_neig;
@@ -77,33 +83,45 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
         end
 
         % Adjacency matrix (asymmetric in case of limited fov)
-        M(agent, neig_list) = 1;
+        M(agent, neig_list) = 1; % 5*5, but row 1, column 2-5 = 1
 
         
         %% Compute different contributions
-        
+        % You see, the decision of each drone is affected by all of it's
+        % neighbors
         if nb_neig ~= 0
-            v_rel = vel - vel(:, agent);
-            v_rel_norm = sqrt(sum((v_rel.^2), 1));
+            v_rel = vel - vel(:, agent); % relative velocity
+            v_rel_norm = sqrt(sum((v_rel.^2), 1)); % relative distance in velocity
 
             % Compute vel and pos unit vector between two agents
-            p_rel_u = -p_rel ./ dist;
+            p_rel_u = -p_rel ./ dist; % pos dist relative vector, tho I don't know why we should do this
             v_rel_u = -v_rel ./ v_rel_norm;
 
-            for agent2 = neig_list'
+            for agent2 = neig_list' % for each of its neighbor
                 
                 % Repulsion and attraction
-                if dist(agent2) < p_swarm.r0_rep  % repulsion
+                if dist(agent2) < p_swarm.r0_rep  % repulsion compare the distance between a1&a2, if<25, repulse
+                    % p_swarm.p_rep = 0.03
+                    % The equation is in the paper. But I know that the
+                    % overall vel_rep is the sum of resulted velocity with
+                    % all other agents(dist), I think the x,y shows the
+                    % direction of v. It depends on the dist in x&y axis
                     vel_rep(:, agent) = vel_rep(:, agent) + ...
                         p_swarm.p_rep * (p_swarm.r0_rep - dist(agent2)) * p_rel_u(:, agent2);
                 else  % attraction
+                    % if > 25 then attraction
                     vel_rep(:, agent) = vel_rep(:, agent) + ...
                         p_swarm.p_rep * (dist(agent2) - p_swarm.r0_rep) *- p_rel_u(:, agent2);
                 end
 
                 % Velocity alignement
+                % What are v_fric, r0_fric, a_fric, p_fric, v_fric_max -> check in
+                % paper
+                % get_v_max(0.63, 15.8927-85.3, 4.16, 3.2)
                 v_fric_max = get_v_max(p_swarm.v_fric, dist(agent2) - p_swarm.r0_fric, p_swarm.a_fric, p_swarm.p_fric);
-
+                
+                % v_rel_norm is the relative distance in velocity. I don't
+                % know why we'll have this
                 if v_rel_norm(agent2) > v_fric_max
                     vel_fric(:, agent) = vel_fric(:, agent) + ...
                         p_swarm.C_fric * (v_rel_norm(agent2) - v_fric_max) * v_rel_u(:, agent2);
@@ -113,25 +131,28 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
         
         
         %% Wall and obstacle avoidance
-
-        % Add arena repulsion effect
+        
+        % However, in this simulation, is_actice_arena and spheres = False
+        % Add arena repulsion effect - False
         if (p_swarm.is_active_arena == true)
-            unit = eye(3);
+            unit = eye(3); % identity matrix, 3 axises
             %On each axis we have the two repulsions
             for axis = 1:3
                 %On each axis there is two forces (each side of the arena)
                 for dir = 1:2
-                    dist_ab = abs(pos(axis, agent) - p_swarm.x_arena(axis, dir));
-
+                    % x_arena 3*2 double [-100 100; -100 100; -100 100]
+                    dist_ab = abs(pos(axis, agent) - p_swarm.x_arena(axis, dir)); % absolute dist between the current agent pos and each side of the arena
+                    % v_shill = 13.6; still don't understand. model the
+                    % wall has velocity?
                     %Compute velocity of wall shill agent toward center of the arena
                     v_wall_virtual = unit(:, axis) .* p_swarm.v_shill;
-
+                    
                     if dir == 2
-                        v_wall_virtual = -v_wall_virtual;
+                        v_wall_virtual = -v_wall_virtual; % replusion from the opposite direction
                     end
 
                     %Compute relative velocity (Wall - Agent)
-                    vel_ab = sqrt(sum((vel(:, agent) - v_wall_virtual).^2));
+                    vel_ab = sqrt(sum((vel(:, agent) - v_wall_virtual).^2)); % v_wall_virtual 3*3 but vel(:, agent) 3*1
 
                     v_wall_max = get_v_max(0, dist_ab - p_swarm.r0_shill, p_swarm.a_shill, p_swarm.p_shill);
 
@@ -143,12 +164,12 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
             end
         end
 
-        % Compute spheric effect
+        % Compute spheric effect - False
         if (p_swarm.is_active_spheres == true)
 
             for obs = 1:p_swarm.n_spheres
                 % Get obstacle center and radius
-                c_obs = p_swarm.spheres(1:3, obs);
+                c_obs = p_swarm.spheres(1:3, obs); % if the obstacle is sphere, then we also need z axis to calculate
                 r_obs = p_swarm.spheres(4, obs);
 
                 % Compute distance agent(a)-obstacle(b)
@@ -161,11 +182,11 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 
                 % Compute relative velocity agent-obstacle
                 vel_ab = sqrt(sum((vel(:, agent) - v_obs_virtual).^2));
-
+                
                 if dist_ab < min_dist_obs
                     min_dist_obs = dist_ab;
                 end
-
+      
                 v_obs_max = get_v_max(0, dist_ab - p_swarm.r0_shill, p_swarm.a_shill, p_swarm.p_shill);
 
                 if vel_ab > v_obs_max
@@ -174,29 +195,34 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
             end
         end
 
-        % Compute cylindric effect
+        % Compute cylindric effect - True
         if (p_swarm.is_active_cyl == true)
 
-            for obs = 1:p_swarm.n_cyl
+            for obs = 1:p_swarm.n_cyl % 14 n_cyl
                 % Get obstacle center and radius
-                c_obs = p_swarm.cylinders(1:2, obs);
-                r_obs = p_swarm.cylinders(3, obs);
+                c_obs = p_swarm.cylinders(1:2, obs); % e.g., c_obs = [37.5; 37.5]
+                r_obs = p_swarm.cylinders(3, obs); % e.g., r_obs = 18.75
 
                 % Compute distance agent(a)-obstacle(b)
-                dist_ab = sqrt(sum((pos(1:2, agent) - c_obs).^2)) - r_obs;
-                nb_obs_collisions = nb_obs_collisions + sum(dist_ab < r_agent);
+                dist_ab = sqrt(sum((pos(1:2, agent) - c_obs).^2)) - r_obs; % relative dist with obs - r_obs -> real dist, dist_ab = 118.1149
+                nb_obs_collisions = nb_obs_collisions + sum(dist_ab < r_agent); % r_agent = 0.5. Because the pos is the coord of agent center
 
                 % Set the virtual speed of the obstacle direction out of
                 % the obstacle
-                v_obs_virtual = (pos(1:2, agent) - c_obs) / (dist_ab + r_obs) * p_swarm.v_shill;
+                
+                % I don't understand why we have to simulate obs speed...
+                % (pos(1:2, agent) - c_obs) is the x-y vector for dist diff
+                % dist vector/ab dist -> unit dist diff, then *v_shill
+                v_obs_virtual = (pos(1:2, agent) - c_obs) / (dist_ab + r_obs) * p_swarm.v_shill; % v_shill = 13.6
 
                 % Compute relative velocity agent-obstacle
                 vel_ab = sqrt(sum((vel(1:2, agent) - v_obs_virtual).^2));
-
+                
+                % dist_ab records the minimal dist between agent&obstacle
                 if dist_ab < min_dist_obs
                     min_dist_obs = dist_ab;
                 end
-
+                % Again, get_v_max?
                 v_obs_max = get_v_max(0, dist_ab - p_swarm.r0_shill, p_swarm.a_shill, p_swarm.p_shill);
 
                 if vel_ab > v_obs_max
@@ -208,14 +234,16 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
         end
         
         %% Sum agent-agent and obstacle contributions
-
+        % velocity contribution of all parts, add them together
         vel_command(:, agent) = vel_rep(:, agent) + vel_fric(:, agent) + vel_obs(:, agent) + vel_wall(:, agent);
 
         % Add self propulsion OR migration term
         v_norm = sqrt(sum((vel(:, agent).^2), 1));
 
-        if p_swarm.is_active_migration == true% migration
-            vel_command(:, agent) = vel_command(:, agent) + p_swarm.v_ref * p_swarm.u_ref;
+        if p_swarm.is_active_migration == true% migration % True
+            % v_ref = 6; u_ref = [3;0;0] not sure why we add this, I guess
+            % this velocity is for moving towards the target
+            vel_command(:, agent) = vel_command(:, agent) + p_swarm.v_ref * p_swarm.u_ref; 
         elseif p_swarm.is_active_goal == true
             x_goal_rel = p_swarm.x_goal - pos(:, agent);
             u_goal = x_goal_rel / norm(x_goal_rel);
@@ -232,26 +260,28 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     %% Compute collisions and bound velocities and accelerations
 
     % Total number of collisions per time step
-    nb_agent_collisions = nb_agent_collisions / 2; % reciprocal
+    nb_agent_collisions = nb_agent_collisions / 2; % reciprocal if two agents collide with each other, we only count them as 1
     collisions = [nb_agent_collisions nb_obs_collisions min_dist_obs];
 
-    % Add random effect on velocities
+    % Add random effect on velocities - False
     if isfield(p_swarm, 'c_r')
         vel_command = vel_command + p_swarm.c_r * randn(3, nb_agents);
     end
 
     % Bound velocities and acceleration
-    if ~isempty(p_swarm.max_v)
-        vel_cmd_norm = sqrt(sum((vel_command.^2), 1));
+    if ~isempty(p_swarm.max_v) % now max_v = 7
+        vel_cmd_norm = sqrt(sum((vel_command.^2), 1)); % vel command, square sum and sqrt
         v_norm = sqrt(sum((vel.^2), 1));
         
-        idx_to_bound = (vel_cmd_norm > p_swarm.max_v);
-        if sum(idx_to_bound) > 0
+        idx_to_bound = (vel_cmd_norm > p_swarm.max_v); 
+        if sum(idx_to_bound) > 0 % if the vel_cmd value is larger than max_v, for those larger ones
+            % scale the velocity, vel_command < vel_cmd_norm
             vel_command(:, idx_to_bound) = p_swarm.max_v * ...
                 vel_command(:, idx_to_bound) ./ repmat(vel_cmd_norm(idx_to_bound), 3, 1);
+            % repmat -> repeat copies of array
         end
     end
-    if ~isempty(p_swarm.max_a)
+    if ~isempty(p_swarm.max_a) % max_a = 10, if larger, scale the accelerator
         accel_cmd = (vel_command-vel)./dt;
         accel_cmd_norm = sqrt(sum(accel_cmd.^2, 1));
         idx_to_bound = ( accel_cmd_norm > p_swarm.max_a | accel_cmd_norm < - p_swarm.max_a);
@@ -271,6 +301,7 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% I don't understand what does get_v_max mean
 function [ v_fricmax ] = get_v_max(v_fric, r, a, p)
 
     if r < 0
@@ -280,7 +311,8 @@ function [ v_fricmax ] = get_v_max(v_fric, r, a, p)
     else
         v_fricmax = sqrt(2 * a * r - a^2 / p^2);
     end
-
+    % bc v_fric = 0.63, r<0, v_fricmax = 0, thus v_fricmax<v_fric, thus
+    % v_fricmax = 0.63
     if v_fricmax < v_fric
         v_fricmax = v_fric;
     end
