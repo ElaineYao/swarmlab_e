@@ -135,7 +135,7 @@ for time = p_sim.start_time:p_sim.dt:p_sim.end_time
     end
     
 % ----------------------
-    attack(time);
+%     attack(time);
 % ----------------------
     % Compute velocity commands from swarming algorithm
     [vel_c,collisions] = swarm.update_command(p_swarm, p_swarm.r_coll, p_sim.dt);

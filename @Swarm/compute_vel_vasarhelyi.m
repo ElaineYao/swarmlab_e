@@ -101,7 +101,7 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
                 
                 % Repulsion and attraction
                 if dist(agent2) < p_swarm.r0_rep  % repulsion compare the distance between a1&a2, if<25, repulse
-                    % p_swarm.p_rep = 0.03
+                    % p_swarm.p_rep = 0.03 gain
                     % The equation is in the paper. But I know that the
                     % overall vel_rep is the sum of resulted velocity with
                     % all other agents(dist), I think the x,y shows the
@@ -117,7 +117,8 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
                 % Velocity alignement
                 % What are v_fric, r0_fric, a_fric, p_fric, v_fric_max -> check in
                 % paper
-                % get_v_max(0.63, 15.8927-85.3, 4.16, 3.2)
+                % get_v_max(0.63, 15.8927-85.3, 4.16, 3.2) a_fric is the
+                % relative acceleration when braking
                 v_fric_max = get_v_max(p_swarm.v_fric, dist(agent2) - p_swarm.r0_fric, p_swarm.a_fric, p_swarm.p_fric);
                 
                 % v_rel_norm is the relative distance in velocity. I don't
@@ -245,7 +246,7 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
             % this velocity is for moving towards the target
             vel_command(:, agent) = vel_command(:, agent) + p_swarm.v_ref * p_swarm.u_ref; 
         elseif p_swarm.is_active_goal == true
-            x_goal_rel = p_swarm.x_goal - pos(:, agent);
+            x_goal_rel = p_swarm.x_goal(:, agent) - pos(:, agent);
             u_goal = x_goal_rel / norm(x_goal_rel);
             vel_command(:, agent) = vel_command(:, agent) + p_swarm.v_ref * u_goal;
         else
@@ -301,7 +302,7 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% I don't understand what does get_v_max mean
+% Allowed max velocity when braking without collision
 function [ v_fricmax ] = get_v_max(v_fric, r, a, p)
 
     if r < 0

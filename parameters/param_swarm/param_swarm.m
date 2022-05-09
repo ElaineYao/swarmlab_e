@@ -1,8 +1,8 @@
 % In your main, run this script after the swarm initialization
 
 % Variables to be set
-p_swarm.is_active_migration = true;
-p_swarm.is_active_goal = false;
+p_swarm.is_active_migration = false;
+p_swarm.is_active_goal = true;
 p_swarm.is_active_arena = false;
 p_swarm.is_active_spheres = false;
 p_swarm.is_active_cyl = true;
@@ -133,14 +133,24 @@ p_swarm.V = 0; % [m/s]
 p_swarm.seed = 5;
 rng(p_swarm.seed);
 
+% Set the goal
+p_swarm.x_goal = [302 298 304 296 300 ; 152 148 154 146 150; -38 -38 -38 -38 -38];
+
 % ---------Elaine --------
 init_pos = rand(3,p_swarm.nb_agents);
+% init_x = rand(1,p_swarm.nb_agents)*1.75 - 0.5;
+% init_y = rand(1,p_swarm.nb_agents)*-3.5 -2.5;
+% init_pos = [init_x; init_y;0.6*ones(1,p_swarm.nb_agents)];
 init_pos = [init_pos(1:2,:);0.6*ones(1,p_swarm.nb_agents)];
 % p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * rand(3,p_swarm.nb_agents);
 p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
-% disp('init_pos');
+p_swarm.Pos0 = [-5.5601 8.3722 5.3182 -6.2456 -1.1738;
+  167.4146 159.7682 160.3684 151.6148 153.1662;
+  -38.0000 -38.0000 -38.0000 -38.0000 -38.0000];
+
+% disp('init_pos');                
 % disp(init_pos);
-% disp(p_swarm.Pos0);
+disp(p_swarm.Pos0);
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
 
 

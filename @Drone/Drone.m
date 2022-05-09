@@ -373,75 +373,53 @@ classdef Drone < handle
                 % velocity in the body frame correponds to the velocity in the
                 % inertial frame. Only usable with the velocity controller.
                 
+                % Original ---------
                 self.vel_xyz = self.command(2:4);
-%                 self.pos_ned = self.pos_ned + self.vel_xyz * self.p_sim.dt;
-%                 rng('shuffle');
-%                 rand('twister',mod(floor(now*8640000),2^31-1));
-% ----------
-%                 real gps pos
-                self.real_pos_ned = self.real_pos_ned + self.vel_xyz * self.p_sim.dt;
-%                 gps pos when attacked
-                spoof_pos = self.pos_ned + self.vel_xyz * self.p_sim.dt;
-%                 file content : xxxxx , each digit is 0/1, indicating
-%                 attacking or not for a certain drone
-                fileID = fopen('/media/EDrive/swarmlab_e/flag.txt', 'r');
-                flag = fscanf(fileID, '%f');
-                fclose(fileID);
-%                 parse file content
-                idx = find(flag);
-%                 1st drone
-                
-                
-                if ismember(i_drone, idx) 
-%                     noise = [0.5*rand(2,1);0];
-                    fpath = strcat('/media/EDrive/swarmlab_e/n', num2str(i_drone));
-                    fpath = strcat(fpath, '.txt');
-%                     disp(fpath)
-                    fileid = fopen(fpath, 'r');
-                    noise = fscanf(fileid, '%f');
-                    fclose(fileid);
-                    self.pos_ned = spoof_pos+noise;
-                else
-                    % ------------------
-%                     if ((time>21) && (i_drone==2))
-%                         % keep the y-axis of the blue one
-%                         self.pos_ned = [self.real_pos_ned(1);151.99;self.real_pos_ned(3)];
-%                     elseif ((time>21) && (i_drone==4))
-%                         self.pos_ned = [self.real_pos_ned(1);149.22;self.real_pos_ned(3)];
-%                     else
-%                     self.pos_ned = self.real_pos_ned;
-%                     end
-                    % ------------------
-%                     self.pos_ned = self.real_pos_ned;
-                    self.pos_ned = spoof_pos;
-                end
-% ----------
-%                 record the position for each drone
-                pos_time = [time, self.pos_ned.'];
-                vel_time = [time, (self.vel_xyz * self.p_sim.dt).'];
-                switch i_drone
-                    case 1
-                        dlmwrite('pos_ned_1.csv',pos_time,'delimiter',',','-append');
-                        dlmwrite('vel_xyzt_1.csv',vel_time,'delimiter',',','-append');
-                    case 2
-                        dlmwrite('pos_ned_2.csv',pos_time,'delimiter',',','-append');
-                        dlmwrite('vel_xyzt_2.csv',vel_time,'delimiter',',','-append');
-                    case 3
-                        dlmwrite('pos_ned_3.csv',pos_time,'delimiter',',','-append');
-                        dlmwrite('vel_xyzt_3.csv',vel_time,'delimiter',',','-append');
-                    case 4
-                        dlmwrite('pos_ned_4.csv',pos_time,'delimiter',',','-append');
-                        dlmwrite('vel_xyzt_4.csv',vel_time,'delimiter',',','-append');
-                    case 5
-                        dlmwrite('pos_ned_5.csv',pos_time,'delimiter',',','-append');
-                        dlmwrite('vel_xyzt_5.csv',vel_time,'delimiter',',','-append');
-                end
-                    
-%                 disp(self.pos_ned);
-%                 disp(size(self.pos_ned));
-%                 dlmwrite('noise.csv',noise,'delimiter',',','-append');
-%                 dlmwrite('pos_ned_noi.csv',self.pos_ned,'delimiter',',','-append');
+                self.pos_ned = self.pos_ned + self.vel_xyz * self.p_sim.dt;
                 self.attitude(3) = self.command(1); % to plot drone psi angle
+                % Original ---------
+                
+                % Attack ----------
+%                 self.vel_xyz = self.command(2:4);
+%                 self.real_pos_ned = self.real_pos_ned + self.vel_xyz * self.p_sim.dt; % real gps pos
+%                 spoof_pos = self.pos_ned + self.vel_xyz * self.p_sim.dt; % gps pos when attacked
+%                 fileID = fopen('/media/EDrive/swarmlab_e/flag.txt', 'r'); % each digit is 0/1, indicating attacking or not for a certain drone
+%                 flag = fscanf(fileID, '%f');
+%                 fclose(fileID);
+%                 idx = find(flag); %  parse file content
+%                 
+%                 if ismember(i_drone, idx) 
+%                     fpath = strcat('/media/EDrive/swarmlab_e/n', num2str(i_drone));
+%                     fpath = strcat(fpath, '.txt');
+%                     fileid = fopen(fpath, 'r');
+%                     noise = fscanf(fileid, '%f');
+%                     fclose(fileid);
+%                     self.pos_ned = spoof_pos+noise;
+%                 else
+%                     self.pos_ned = spoof_pos;
+%                 end
+%                 
+%                 pos_time = [time, self.pos_ned.']; % record the position for each drone
+%                 vel_time = [time, (self.vel_xyz * self.p_sim.dt).'];
+%                 switch i_drone
+%                     case 1
+%                         dlmwrite('pos_ned_1.csv',pos_time,'delimiter',',','-append');
+%                         dlmwrite('vel_xyzt_1.csv',vel_time,'delimiter',',','-append');
+%                     case 2
+%                         dlmwrite('pos_ned_2.csv',pos_time,'delimiter',',','-append');
+%                         dlmwrite('vel_xyzt_2.csv',vel_time,'delimiter',',','-append');
+%                     case 3
+%                         dlmwrite('pos_ned_3.csv',pos_time,'delimiter',',','-append');
+%                         dlmwrite('vel_xyzt_3.csv',vel_time,'delimiter',',','-append');
+%                     case 4
+%                         dlmwrite('pos_ned_4.csv',pos_time,'delimiter',',','-append');
+%                         dlmwrite('vel_xyzt_4.csv',vel_time,'delimiter',',','-append');
+%                     case 5
+%                         dlmwrite('pos_ned_5.csv',pos_time,'delimiter',',','-append');
+%                         dlmwrite('vel_xyzt_5.csv',vel_time,'delimiter',',','-append');
+%                 end
+%                 self.attitude(3) = self.command(1); % to plot drone psi angle
+                % Attack ----------
                 
                 % Update pos_ned_history
                 if isempty(self.pos_ned_history)
