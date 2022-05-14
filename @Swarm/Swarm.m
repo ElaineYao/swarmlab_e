@@ -185,10 +185,13 @@ classdef Swarm < handle
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function colors = get_colors(self)
             colors = [255 0 0;
-                      0 0 255;
-                      0 255 0;
-                      255 139 6;
-                      255 6 255]./255;
+                      0 0 255]./255;
+%             when # drones = 5
+%             colors = [255 0 0;
+%                       0 0 255;
+%                       0 255 0;
+%                       255 139 6;
+%                       255 6 255]./255;
              colors = colors.';
 %             colors = zeros(3, self.nb_agents);
 %             

@@ -12,7 +12,7 @@ p_swarm.is_active_cyl = true;
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if ~isfield(p_swarm, 'nb_agents')
-    p_swarm.nb_agents = 5;
+    p_swarm.nb_agents = 2;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Max radius of influence - Metric distance
@@ -78,12 +78,14 @@ if (exist('map','var') && ACTIVE_ENVIRONMENT)
 
     nb_obstacles = length(map.buildings_east);
     cylinder_radius = map.building_width / 2;
-
+    
     p_swarm.cylinders = [
         map.buildings_north'; % x_obstacle
         map.buildings_east'; % y_obstacle
         repmat(cylinder_radius, 1, nb_obstacles)]; % r_obstacle
+
     p_swarm.n_cyl = length(p_swarm.cylinders(1, :));
+    
 else
     p_swarm.cylinders = 0;
     p_swarm.n_cyl = 0;
@@ -144,13 +146,15 @@ init_pos = rand(3,p_swarm.nb_agents);
 init_pos = [init_pos(1:2,:);0.6*ones(1,p_swarm.nb_agents)];
 % p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * rand(3,p_swarm.nb_agents);
 p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
-p_swarm.Pos0 = [-5.5601 8.3722 5.3182 -6.2456 -1.1738;
-  167.4146 159.7682 160.3684 151.6148 153.1662;
-  -38.0000 -38.0000 -38.0000 -38.0000 -38.0000];
+% p_swarm.Pos0 = [-5.5601 8.3722 5.3182 -6.2456 -1.1738;
+%   167.4146 159.7682 160.3684 151.6148 153.1662;
+%   -38.0000 -38.0000 -38.0000 -38.0000 -38.0000];
+
+p_swarm.Pos0 = [5 10; 150 150; -38 -38];
 
 % disp('init_pos');                
 % disp(init_pos);
-disp(p_swarm.Pos0);
+% disp(p_swarm.Pos0);
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
 
 
