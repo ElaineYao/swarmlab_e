@@ -1,4 +1,4 @@
-function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_agent, dt)
+function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_agent, dt,time)
     % ------- dt = 0.01, r_agent = 0.5, self -> Swarm, p_swarm -> struct
     
     % VASARHELYI SWARM ALGORITHM
@@ -44,7 +44,6 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     %% Compute velocity commands
     
     for agent = 1:nb_agents
-        
         
         %% Find neighbors
         
@@ -127,6 +126,8 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
                     vel_fric(:, agent) = vel_fric(:, agent) + ...
                         p_swarm.C_fric * (v_rel_norm(agent2) - v_fric_max) * v_rel_u(:, agent2);
                 end
+%                 dlmwrite('log.csv',v_fric_max,'delimiter',',','-append');
+         
             end
         end
         
@@ -292,7 +293,23 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
                 repmat(accel_cmd_norm(idx_to_bound), 3, 1);
         end
     end
+    
+    vel_rep_xy_1 = vel_rep(:    , 1)';
+    vel_fric_xy_1 = vel_fric(:, 1)';
+    vel_obs_xy_1 = vel_obs(:, 1)';
+    vg_1 = p_swarm.v_ref * u_goal;
+    vg_xy_1 = vg_1(:,1)';
+    vel_command_xy_1 = vel_command(:, 1)';
+    vel_matrix_1 = [time, vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    writematrix(vel_matrix_1,'vel_1.csv','Delimiter',',', 'WriteMode','append');
 
+    vel_rep_xy = vel_rep(:, 2)';
+    vel_fric_xy = vel_fric(:, 2)';
+    vel_obs_xy = vel_obs(:, 2)';
+    vg_xy = (p_swarm.v_ref * u_goal)';
+    vel_command_xy = vel_command(:, 2)';
+    vel_matrix = [time, vel_command_xy(1:2),vel_rep_xy(1:2), vel_fric_xy(1:2), vel_obs_xy(1:2), vg_xy(1:2)];
+    writematrix(vel_matrix,'vel_2.csv','Delimiter',',', 'WriteMode','append');
 
 end
 

@@ -211,11 +211,11 @@ classdef Swarm < handle
         end
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [vel_commands, collisions] = update_command(self, p_swarm, r_coll, dt)
+        function [vel_commands, collisions] = update_command(self, p_swarm, r_coll, dt,time)
 
             % Select the swarm algorithm and call the associated update
             if self.algorithm == "vasarhelyi"
-                [vel_commands, collisions] = self.compute_vel_vasarhelyi(p_swarm, r_coll, dt);
+                [vel_commands, collisions] = self.compute_vel_vasarhelyi(p_swarm, r_coll, dt, time);
             elseif self.algorithm == "olfati_saber"
                 [vel_commands, collisions] = self.compute_vel_olfati_saber(p_swarm, r_coll, dt);
             end

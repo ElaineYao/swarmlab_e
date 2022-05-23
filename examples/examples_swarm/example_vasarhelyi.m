@@ -138,7 +138,7 @@ for time = p_sim.start_time:p_sim.dt:p_sim.end_time
 %     attack(time);
 % ----------------------
     % Compute velocity commands from swarming algorithm
-    [vel_c,collisions] = swarm.update_command(p_swarm, p_swarm.r_coll, p_sim.dt);
+    [vel_c,collisions] = swarm.update_command(p_swarm, p_swarm.r_coll, p_sim.dt, time);
     
     % Update swarm states and plot the drones
     swarm.update_state(wind, time);
