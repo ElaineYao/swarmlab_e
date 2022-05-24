@@ -1,3 +1,4 @@
+
 classdef Drone < handle
     % DRONE : This class is meant to create and manage drones.
     % Every drone is either a fixed-wing or a quadcopter (drone_type).

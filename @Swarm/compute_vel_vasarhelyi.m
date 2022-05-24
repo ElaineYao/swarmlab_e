@@ -208,11 +208,12 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
                 % Compute distance agent(a)-obstacle(b)
                 dist_ab = sqrt(sum((pos(1:2, agent) - c_obs).^2)) - r_obs; % relative dist with obs - r_obs -> real dist, dist_ab = 118.1149
                 nb_obs_collisions = nb_obs_collisions + sum(dist_ab < r_agent); % r_agent = 0.5. Because the pos is the coord of agent center
+                
 
                 % Set the virtual speed of the obstacle direction out of
                 % the obstacle
                 
-                % I don't understand why we have to simulate obs speed...
+                % I don't understand why we have to simulate obs speedist_abd...
                 % (pos(1:2, agent) - c_obs) is the x-y vector for dist diff
                 % dist vector/ab dist -> unit dist diff, then *v_shill
                 v_obs_virtual = (pos(1:2, agent) - c_obs) / (dist_ab + r_obs) * p_swarm.v_shill; % v_shill = 13.6
@@ -257,7 +258,9 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
             end
         end
     end
-    
+    vel_cmd_temp = vel_command(:,1)';
+    writematrix(vel_cmd_temp(1:2),'vel_1_ori.csv','Delimiter',',', 'WriteMode','append');
+
     
     %% Compute collisions and bound velocities and accelerations
 
@@ -297,18 +300,29 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_rep_xy_1 = vel_rep(:    , 1)';
     vel_fric_xy_1 = vel_fric(:, 1)';
     vel_obs_xy_1 = vel_obs(:, 1)';
-    vg_1 = p_swarm.v_ref * u_goal;
-    vg_xy_1 = vg_1(:,1)';
+    vel_xy_1 = vel(:, 1)';
+    x_goal_rel_1 = p_swarm.x_goal(:, 1) - pos(:, 1);
+    u_goal_1 = x_goal_rel_1 / norm(x_goal_rel_1);
+    vg_xy_1 = (p_swarm.v_ref * u_goal_1)';
     vel_command_xy_1 = vel_command(:, 1)';
-    vel_matrix_1 = [time, vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    vel_theta_1 = rad2deg(atan(vel_command_xy_1(1)/vel_command_xy_1(2)));
+    vel_val_1 = sqrt(vel_command_xy_1(1)^2 + vel_command_xy_1(2)^2);
+    dist_ab_1 = sqrt(sum((pos(1:2, 1) - c_obs).^2)) - r_obs;
+    vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_matrix_1,'vel_1.csv','Delimiter',',', 'WriteMode','append');
 
     vel_rep_xy = vel_rep(:, 2)';
     vel_fric_xy = vel_fric(:, 2)';
     vel_obs_xy = vel_obs(:, 2)';
+    vel_xy = vel(:, 2)';
+    x_goal_rel = p_swarm.x_goal(:, 2) - pos(:, 2);
+    u_goal = x_goal_rel / norm(x_goal_rel);
     vg_xy = (p_swarm.v_ref * u_goal)';
     vel_command_xy = vel_command(:, 2)';
-    vel_matrix = [time, vel_command_xy(1:2),vel_rep_xy(1:2), vel_fric_xy(1:2), vel_obs_xy(1:2), vg_xy(1:2)];
+    vel_theta = rad2deg(atan(vel_command_xy(1)/vel_command_xy(2)));
+    vel_val = sqrt(vel_command_xy(1)^2 + vel_command_xy(2)^2);
+    dist_ab_2 = sqrt(sum((pos(1:2, 2) - c_obs).^2)) - r_obs;
+    vel_matrix = [time, vel_theta, vel_val, dist_ab_2, vel_xy(1:2), vel_command_xy(1:2),vel_rep_xy(1:2), vel_fric_xy(1:2), vel_obs_xy(1:2), vg_xy(1:2)];
     writematrix(vel_matrix,'vel_2.csv','Delimiter',',', 'WriteMode','append');
 
 end
