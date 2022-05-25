@@ -325,7 +325,7 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, v_rel_norm_1(2), sum((vel_command_xy_1(1:2) - vel_xy_1(1:2)).^2) ,vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_matrix_1,'vel_1.csv','Delimiter',',', 'WriteMode','append');
    
-    vel_cal_mat_1 = [time, px_12, py_12, vx_12, vy_12, vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    vel_cal_mat_1 = [time, pos(1:2,1)', pos(1:2,2)', vel(1:2,1)', vel(1:2,2)', vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_cal_mat_1,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
     
 
