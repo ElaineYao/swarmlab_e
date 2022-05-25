@@ -308,8 +308,26 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_theta_1 = rad2deg(atan(vel_command_xy_1(1)/vel_command_xy_1(2)));
     vel_val_1 = sqrt(vel_command_xy_1(1)^2 + vel_command_xy_1(2)^2);
     dist_ab_1 = sqrt(sum((pos(1:2, 1) - c_obs).^2)) - r_obs;
-    vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    
+    px_12 = pos(1,1) - pos(1,2);
+    py_12 = pos(2,1) - pos(2,2);
+    
+    vx_12 = vel(1,1) - vel(1,2);
+    vy_12 = vel(2,1) - vel(2,2);
+%     xt1_2 = pos(:,1)
+    
+    v_rel_1 = vel - vel(:, 1); % relative velocity
+    v_rel_norm_1 = sqrt(sum((v_rel_1.^2), 1)); % relative distance in velocity
+
+    
+    % time, vf_angle, vf_value, dist_obstacle,sqrt(delta_v^2) ,(delta_vx^2 +delta_vy^2), v_previous, v_f, v_rep,v_fric, v_o, v_goal
+  
+    vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, v_rel_norm_1(2), sum((vel_command_xy_1(1:2) - vel_xy_1(1:2)).^2) ,vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_matrix_1,'vel_1.csv','Delimiter',',', 'WriteMode','append');
+   
+    vel_cal_mat_1 = [time, px_12, py_12, vx_12, vy_12, vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    writematrix(vel_cal_mat_1,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
+    
 
     vel_rep_xy = vel_rep(:, 2)';
     vel_fric_xy = vel_fric(:, 2)';
@@ -322,7 +340,12 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_theta = rad2deg(atan(vel_command_xy(1)/vel_command_xy(2)));
     vel_val = sqrt(vel_command_xy(1)^2 + vel_command_xy(2)^2);
     dist_ab_2 = sqrt(sum((pos(1:2, 2) - c_obs).^2)) - r_obs;
-    vel_matrix = [time, vel_theta, vel_val, dist_ab_2, vel_xy(1:2), vel_command_xy(1:2),vel_rep_xy(1:2), vel_fric_xy(1:2), vel_obs_xy(1:2), vg_xy(1:2)];
+    
+    v_rel_2 = vel - vel(:, 2); % relative velocity
+    v_rel_norm_2 = sqrt(sum((v_rel_2.^2), 1)); % relative distance in velocity
+    
+    % time, vf_angle, vf_value, dist_obstacle, delta_vx, delta_vy, v_previous, v_f, v_rep,v_fric, v_o, v_goal
+    vel_matrix = [time, vel_theta, vel_val, dist_ab_2, v_rel_norm_2(1), sum((vel_command_xy(1:2) - vel_xy(1:2)).^2), vel_xy(1:2), vel_command_xy(1:2),vel_rep_xy(1:2), vel_fric_xy(1:2), vel_obs_xy(1:2), vg_xy(1:2)];
     writematrix(vel_matrix,'vel_2.csv','Delimiter',',', 'WriteMode','append');
 
 end
