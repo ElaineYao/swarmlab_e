@@ -28,7 +28,7 @@
 % ---------- Original ---------
 
 function map = create_shifted_buildings(map)
-    map.buildings_north = [112.5];
+    map.buildings_north = [0];
     map.buildings_east = [150];
     
     nb_buildings = length(map.buildings_east);

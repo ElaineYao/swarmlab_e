@@ -136,7 +136,7 @@ p_swarm.seed = 5;
 rng(p_swarm.seed);
 
 % Set the goal
-p_swarm.x_goal = [302 298 304 296 300 ; 152 148 154 146 150; -38 -38 -38 -38 -38];
+p_swarm.x_goal = [350 350; 150 150 ; -38 -38];
 
 % ---------Elaine --------
 init_pos = rand(3,p_swarm.nb_agents);
@@ -150,7 +150,9 @@ p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
 %   167.4146 159.7682 160.3684 151.6148 153.1662;
 %   -38.0000 -38.0000 -38.0000 -38.0000 -38.0000];
 
-p_swarm.Pos0 = [88.75 83.75; 150 150; -38 -38];
+px = -18.75-5; % 5
+dx = 105; % 105 when I increase it to 120, the dist = 3.138
+p_swarm.Pos0 = [px (px+dx); 150 150; -38 -38];
 
 % disp('init_pos');                
 % disp(init_pos);

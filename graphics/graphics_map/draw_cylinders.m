@@ -13,6 +13,7 @@ function fig_handle = draw_cylinders(fig_handle, map)
 
   nb_buildings = length(map.buildings_north);
   for i = 1:nb_buildings
+      % Original
       Xtrasl = X + map.buildings_north(i)
       Ytrasl = Y + map.buildings_east(i)
       C = repmat(gray_shade*ones(size(Xtrasl)),1,1,3);
