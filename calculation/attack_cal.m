@@ -4,7 +4,7 @@ syms x1 y1 x2 y2 vx_1 vy_1 vx_2 vy_2 vx_o vy_o vx_g vy_g;
 
 % vars
 M = readmatrix('/media/EDrive/swarmlab_e/vel_1_cal.csv');
-row_idx = 2;
+row_idx = 100;
 x1 = M(row_idx, 2);
 y1 = M(row_idx, 3);
 x2 = M(row_idx, 4);
@@ -31,8 +31,12 @@ vy_g = M(row_idx, 13);
 % vel_rep
 dist_l = sqrt(sum((loc2_att-loc1).^2));
 diff_l = loc1 - loc2_att;
+% when dist_1>25
 vx_rel = 0.03*(1-25/(dist_l))*diff_l(1,1);
 vy_rel = 0.03*(1-25/(dist_l))*diff_l(1,2);
+% when dist_1>25
+vx_rel = 0.03*(25/(dist_l)-1)*diff_l(1,1);
+vy_rel = 0.03*(25/(dist_l)-1)*diff_l(1,2);
 % vel_fric
 dist_v = sqrt(sum((vel2_att-vel1).^2));
 diff_v = vel1 - vel2_att;
