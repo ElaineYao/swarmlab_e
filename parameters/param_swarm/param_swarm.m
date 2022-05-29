@@ -136,8 +136,9 @@ p_swarm.seed = 5;
 rng(p_swarm.seed);
 
 % Set the goal
-% p_swarm.x_goal = [350 350; 150 150 ; -38 -38];
-p_swarm.x_goal = [80 80; 150 150 ; -38 -38];
+% Front setting ----
+p_swarm.x_goal = [350 350; 150 150 ; -38 -38];
+% p_swarm.x_goal = [80 80; 150 150 ; -38 -38];
 
 
 % ---------Elaine --------
@@ -152,18 +153,27 @@ p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
 %   167.4146 159.7682 160.3684 151.6148 153.1662;
 %   -38.0000 -38.0000 -38.0000 -38.0000 -38.0000];
 
+% ------ Two drones setting start-------
 px = -18.75-5; % 5
-% the drone in the front
-% dx = 100; % 105 when I increase it to 120, the dist = 3.138
+% Front setting ----
+dx = 105; % 105 when I increase it to 120, the dist = 3.138
 % the drone behind
-dx = -5;
+% dx = -5;
 p_swarm.Pos0 = [px (px+dx); 150 150; -38 -38];
 
 % disp('init_pos');                
 % disp(init_pos);
 % disp(p_swarm.Pos0);
-p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
 
+% ------ Two drones setting end-------
+
+% % ------ Four drones setting start-------
+% px = -18.75-5; % 5
+% dx = 135;
+% p_swarm.Pos0 = [px (px+dx) (px+dx) (px+dx); 150 150 (150-25) (150-25); -38 -38 -38 -38];
+% % ------ Four drones setting end-------
+
+p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Call algorithm-specific swarm parameters

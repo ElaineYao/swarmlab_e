@@ -7,6 +7,7 @@ M = readmatrix('/media/EDrive/swarmlab_e/vel_1_cal.csv');
 m_size = size(M);
 row = m_size(1,1);
 for row_idx = 1:row
+% for row_idx = 3876:3876
     x1 = M(row_idx, 2);
     y1 = M(row_idx, 3);
     x2 = M(row_idx, 4);
@@ -96,7 +97,7 @@ for row_idx = 1:row
     % b = 0;
     % % c = x2-x1;
     % delta_x = 1; % vy = 0.0391
-    vy = m - b*(3/(4*((c + delta_x)^2 + b^2)^(1/2)) - 3/100); 
+    vy = m - b*(3/(4*((c + delta_x).^2 + b.^2).^(1/2)) - 3/100); 
     % 
     % 
     v_mat = [vx, vy];
