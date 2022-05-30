@@ -48,12 +48,12 @@ else
     vy_fric = 0.05*(1-0.63/dist_v)*diff_v(1,2);
 end
 
-vx_rel
-vy_rel
+vx_rel;
+vy_rel;
 
-vx = vx_o+vx_g+vx_rel+vx_fric;
+vx = vx_o+vx_g+vx_rel+vx_fric
 % vx = subs(vx, {(delta_y -y1+y2), (vx_g+vx_o), (x2-x1)}, {sym('b'), sym('a'), sym('c')})
 % pretty(vx);
 
-vy = vy_o+vy_g+vy_rel+vy_fric;
+vy = vy_o+vy_g+vy_rel+vy_fric
 % pretty(vy);
