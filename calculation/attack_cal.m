@@ -5,14 +5,29 @@ syms x1 y1 x2 y2 vx_1 vy_1 vx_2 vy_2 vx_o vy_o vx_g vy_g;
 % vars
 M = readmatrix('/media/EDrive/swarmlab_e/vel_1_cal.csv');
 row_idx = 100;
+
+% num_agents = 4;
+% % vel_mat: 2*num_agents, store position(x,y) of each agent
+% vel_mat = zeros(2,num_agents);
+% for agent = 1: num_agents
+%     vel_mat(:,agent) = []
+% end
 x1 = M(row_idx, 2);
 y1 = M(row_idx, 3);
 x2 = M(row_idx, 4);
 y2 = M(row_idx, 5);
+x3 = M(row_idx, 6);
+y3 = M(row_idx, 7);
+x4 = M(row_idx, 8);
+y4 = M(row_idx, 9);
 vx_1 = M(row_idx, 6);
 vy_1 = M(row_idx, 7);
 vx_2 = M(row_idx, 8);
 vy_2 = M(row_idx, 9);
+vx_3 = M(row_idx, 8);
+vy_3 = M(row_idx, 9);
+vx_4 = M(row_idx, 8);
+vy_4 = M(row_idx, 9);
 
 loc1 = [x1, y1]; % loc of target drone
 vel1 = [vx_1, vy_1]; % vel of target drone

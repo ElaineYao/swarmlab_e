@@ -37,7 +37,7 @@ fontsize = 12;
 % vel_1_mat = ['time', 'vf_angle', 'vf_val', 'dist_obs','diff_v_pre_val','diff_v_pre_curcmd', 'vx_pre', 'vy_pre', 'vx_cmd', 'vy_cmd', 'vx_rep', 'vy_rep','vx_fric','vy_fric', 'vx_o', 'vy_o', 'vx_g', 'vy_g'];
 % writematrix(vel_1_mat,'vel_1.csv','Delimiter',',', 'WriteMode','append');
 % 
-% vel_1_cal_mat = ['time', 'x1', 'y1', 'x2', 'y2', 'vx_1', 'vy_1', 'vx_2', 'vy_2', 'vx_o', 'vy_o', 'vx_g', 'vy_g'];
+% vel_1_cal_mat = ['time', 'x1', 'y1', 'x2', 'y2', 'x3', 'y3', 'x4', 'y4', 'vx_1', 'vy_1', 'vx_2', 'vy_2', 'vx_3', 'vy_3', 'vx_4', 'vy_4', 'vx_o', 'vy_o', 'vx_g', 'vy_g'];
 % writematrix(vel_1_cal_mat,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
 
 %% Get changes from GUI
