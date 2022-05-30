@@ -169,8 +169,9 @@ p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
 
 % ------ Four drones setting start-------
 px = -18.75-5; % 5
-dx = 135;
-p_swarm.Pos0 = [px (px+dx) (px+dx) (px+dx); 150 150 (150-25) (150+25); -38 -38 -38 -38];
+dx = 40;
+dx_2 = 0;
+p_swarm.Pos0 = [px (px+dx) (px+dx_2) (px+dx_2); 150 150 (150-25) (150+25); -38 -38 -38 -38];
 % ------ Four drones setting end-------
 
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
