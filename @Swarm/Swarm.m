@@ -184,6 +184,7 @@ classdef Swarm < handle
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function colors = get_colors(self)
+            % red, blue, brown(165 42 42), green, purple(147 112 219)
             colors = [255 0 0;
                       0 0 255;
                       165 42 42;

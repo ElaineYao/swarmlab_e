@@ -46,7 +46,7 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     for agent = 1:nb_agents
         
         %% Find neighbors
-%         % ----- GPS attack start -------
+%         % ----- Expe 1: GPS attack start -------
 %         % Compute agent-agent distance matrix
 %         p_rel = pos - pos(:, agent); % substract the agent'th column -> get the relative coord
 %         dist = sqrt(sum((p_rel.^2), 1)); % sum(A, 1)-> sum in column 1*5 -> every column is the relative absolute dist to agent
@@ -62,7 +62,11 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 %             pos(1,2) = pos(1,2) - delta - 0.01;
 %         end
 %        
-%         % ----- GPS attack end ---------
+%         % ----- Expe 1: GPS attack end ---------
+
+%         ----- Expe 3: GPS attack start -------
+%         pos(1:2,2) = pos(1:2,2)+[2;-2];
+%         ----- Expe 3: GPS attack end -------
         
         % Compute agent-agent distance matrix
         p_rel = pos - pos(:, agent); % substract the agent'th column -> get the relative coord
