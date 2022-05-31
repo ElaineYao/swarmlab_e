@@ -184,10 +184,14 @@ classdef Swarm < handle
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function colors = get_colors(self)
-            % red, blue, brown(165 42 42), green(0 255 0), purple(147 112 219)
+            % red, blue, brown(165 42 42), green(0 255 0), purple(147 112
+            % 219), pink(219, 112, 147)
             colors = [255 0 0;
                       0 0 255;
-                      165 42 42]./255;
+                      165 42 42
+                      0 255 0
+                      147 112 219
+                      219 112 147]./255;
 %             when # drones = 5
 %             colors = [255 0 0;
 %                       0 0 255;

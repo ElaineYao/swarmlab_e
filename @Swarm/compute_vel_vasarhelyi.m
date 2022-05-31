@@ -84,9 +84,9 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 %         if (mod(100*time,2)==1)
 %             pos(1:2,2) = pos(1:2,2) + [1.5;0];
 %         end
-        if (time>10)
-            pos(1:2,2) = pos(1:2,2) + [2;0];
-        end
+%         if (time>10)
+%             pos(1:2,2) = pos(1:2,2) + [2;0];
+%         end
         
 %         ----- Expe 4: GPS attack start -------
         

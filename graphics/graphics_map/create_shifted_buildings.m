@@ -29,8 +29,8 @@
 
 function map = create_shifted_buildings(map)
     % Expe 4
-    map.buildings_north = [0; 0; 0];
-    map.buildings_east = [150; 110; 190];
+    map.buildings_north = [0];
+    map.buildings_east = [150];
     
     nb_buildings = length(map.buildings_east);
     map.buildings_heights = map.max_height*ones(nb_buildings,1);
