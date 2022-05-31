@@ -12,7 +12,7 @@ p_swarm.is_active_cyl = true;
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if ~isfield(p_swarm, 'nb_agents')
-    p_swarm.nb_agents = 4;
+    p_swarm.nb_agents = 3;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Max radius of influence - Metric distance
@@ -137,7 +137,7 @@ rng(p_swarm.seed);
 
 % Set the goal
 % Front setting ----
-p_swarm.x_goal = [350 350 350 350;150 150 150 150;-38 -38 -38 -38];
+p_swarm.x_goal = [350 350 350;150 150 150;-38 -38 -38];
 % p_swarm.x_goal = [80 80; 150 150 ; -38 -38];
 
 
@@ -170,14 +170,14 @@ p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
 % ------ Four drones setting start-------
 px = -18.75-5; % 5
 % dx = 10+18.5;
-dx = 45; % should > 38.75+5
+dx = 5; % should > 38.75+5
 dx_2 = 0;
 % dx_3 = 30;
 % dy = 0;
 dy_2 = 25.5;
 dy_3 = 30;
 % p_swarm.Pos0 = [px (px+dx) (px+dx_2) (px+dx_2) (px+dx_3); 150 (150+dy_2) (150-dy_2) (150+dy_2) (150+dy_2); -38 -38 -38 -38 -38];
-p_swarm.Pos0 = [px (px+dx) (px+dx_2) (px+dx_2); (150) 150 (150-dy_2) (150+dy_3); -38 -38 -38 -38];
+p_swarm.Pos0 = [px (px-2*dx) (px-dx) ; 150 150 150; -38 -38 -38];
 % ------ Four drones setting end-------
 
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
