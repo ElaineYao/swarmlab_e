@@ -1,6 +1,7 @@
 % syms delta_x delta_y delta_vx delta_vy;
 % syms delta_x delta_y delta_vx delta_vy;
 % syms x1 y1 x2 y2 vx_1 vy_1 vx_2 vy_2 vx_o vy_o vx_g vy_g;
+syms delta_y
 
 % vars
 num_agents = 4;
@@ -20,15 +21,17 @@ vg = zeros(2,1);
 
 % attack parameters
 delta_x = 0;
-delta_y = 0;
+% delta_y = 0;
 delta_vx = 0;
 delta_vy = 0;
 
-for row_idx = 1:row
-% for row_idx = 3876:3876
+% for row_idx = 1:row
+for row_idx = 150:150
     for agent = 1: num_agents
         pos_mat(:,agent) = [M(row_idx, 2*agent); M(row_idx, 2*agent+1)];
         vel_mat(:,agent) = [M(row_idx, 2*num_agents+2*agent); M(row_idx, 2*num_agents+2*agent+1)];
+%         % compensate for GPS attack
+%         pos_mat(:,2) = pos_mat(:,2)+[0;9.8]
     end
     vo = [M(row_idx, num_agents*4+2);M(row_idx, num_agents*4+3)];
     vg = [M(row_idx, num_agents*4+4);M(row_idx, num_agents*4+5)];
@@ -114,10 +117,15 @@ for row_idx = 1:row
     
 %     vx_rel = vx_rel2 + vx_rel3 + vx_rel4;
     vx_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(x1 - x3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(x1 - x4) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_x - x1 + x2);
-    vy_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(y1 - y3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(y1 - y4) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_y - y1 + y2);
-    v_mat = [vx vy vx_rel vy_rel vo' vg'];
+    % solve vy_rel = 0
+    delta_y = linspace(-10,0,2000);
+    vy_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(y1 - y3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(y1 - y4) - (3./(4.*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2).^2).^(1/2)) - 3/100).*(delta_y - y1 + y2);
+    plot( delta_y, vy_rel);
+    
+    
+%     v_mat = [vx vy vx_rel vy_rel vo' vg'];
 
-    writematrix(v_mat,'vel_my.csv','Delimiter',',', 'WriteMode','append');
+%     writematrix(v_mat,'vel_my.csv','Delimiter',',', 'WriteMode','append');
 end 
 
 
