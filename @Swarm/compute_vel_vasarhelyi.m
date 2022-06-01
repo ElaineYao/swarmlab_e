@@ -43,26 +43,10 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     
     %% Compute velocity commands
     
-    for agent = 1:nb_agents
-        
-        %% Find neighbors
-%         % ----- Expe 1: GPS attack start -------
-%         % Compute agent-agent distance matrix
-%         p_rel = pos - pos(:, agent); % substract the agent'th column -> get the relative coord
-%         dist = sqrt(sum((p_rel.^2), 1)); % sum(A, 1)-> sum in column 1*5 -> every column is the relative absolute dist to agent
-%         dist_mat(agent, :) = dist; % dist matrix ->every row is the relative dist for each agent
-% 
-%         % Define neighbours list
-%         neig_list = (1:nb_agents)'; % 5*1 => 1; 2; 3; 4; 5
-%         neig_list = neig_list(dist ~= 0); % for index = 1, dist = 0, so neig_list = 2; 3; 4; 5 (get the neighbor list)
-%         if dist(neig_list) > (p_swarm.r-0.01)
-% %             delta = dist(neig_list)-p_swarm.r+0.01; % to control the distance to be maximum 150 
-%             tar_dist = 137.5; % max_dist between agents
-%             delta = dist(neig_list)-tar_dist+0.01;
-%             pos(1,2) = pos(1,2) - delta - 0.01;
-%         end
-%        
-%         % ----- Expe 1: GPS attack end ---------
+    %         ----- Expe 2: GPS attack start -------
+%         pos(1:2,3) = pos(1:2,3)+[0;-2];
+
+%         ----- Expe 2: GPS attack end -------
 
 % %         ----- Expe 3: GPS attack start -------
 %         if (time > 0.08) && (time <7)
@@ -91,6 +75,29 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 %         end
         
 %         ----- Expe 4: GPS attack end -------
+    
+    for agent = 1:nb_agents
+        
+        %% Find neighbors
+%         % ----- Expe 1: GPS attack start -------
+%         % Compute agent-agent distance matrix
+%         p_rel = pos - pos(:, agent); % substract the agent'th column -> get the relative coord
+%         dist = sqrt(sum((p_rel.^2), 1)); % sum(A, 1)-> sum in column 1*5 -> every column is the relative absolute dist to agent
+%         dist_mat(agent, :) = dist; % dist matrix ->every row is the relative dist for each agent
+% 
+%         % Define neighbours list
+%         neig_list = (1:nb_agents)'; % 5*1 => 1; 2; 3; 4; 5
+%         neig_list = neig_list(dist ~= 0); % for index = 1, dist = 0, so neig_list = 2; 3; 4; 5 (get the neighbor list)
+%         if dist(neig_list) > (p_swarm.r-0.01)
+% %             delta = dist(neig_list)-p_swarm.r+0.01; % to control the distance to be maximum 150 
+%             tar_dist = 137.5; % max_dist between agents
+%             delta = dist(neig_list)-tar_dist+0.01;
+%             pos(1,2) = pos(1,2) - delta - 0.01;
+%         end
+%        
+%         % ----- Expe 1: GPS attack end ---------
+
+
         
         % Compute agent-agent distance matrix
         p_rel = pos - pos(:, agent); % substract the agent'th column -> get the relative coord
@@ -399,20 +406,20 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_matrix_2 = [time, dist_mat(2, :), vel_command(1, 2), vel_rep(1, 2), vel_fric(1, 2), vel_obs(1, 2), vg_xy_2(1)];
     writematrix(vel_matrix_2,'vel_2.csv','Delimiter',',', 'WriteMode','append');
     
-    % time; neighbor_dist; vx_cmd; vx_rep; vx_fric; vx_obs; vx_g
-    x_goal_rel_3 = p_swarm.x_goal(:, 3) - pos(:, 3);
-    u_goal_3 = x_goal_rel_3 / norm(x_goal_rel_3);
-    vg_xy_3 = (p_swarm.v_ref * u_goal_3)';
-    vel_matrix_3 = [time, dist_mat(3, :), vel_command(1, 3), vel_rep(1, 3), vel_fric(1, 3), vel_obs(1, 3), vg_xy_3(1)];
-    writematrix(vel_matrix_3,'vel_3.csv','Delimiter',',', 'WriteMode','append');
-    
-    % time; neighbor_dist; vx_cmd; vx_rep; vx_fric; vx_obs; vx_g
-    x_goal_rel_4 = p_swarm.x_goal(:, 4) - pos(:, 4);
-    u_goal_4 = x_goal_rel_4 / norm(x_goal_rel_4);
-    vg_xy_4 = (p_swarm.v_ref * u_goal_4)';
-    vel_matrix_4 = [time, dist_mat(4, :), vel_command(1, 4), vel_rep(1, 4), vel_fric(1, 4), vel_obs(1, 4), vg_xy_4(1)];
-    writematrix(vel_matrix_4,'vel_4.csv','Delimiter',',', 'WriteMode','append');
-    
+%     % time; neighbor_dist; vx_cmd; vx_rep; vx_fric; vx_obs; vx_g
+%     x_goal_rel_3 = p_swarm.x_goal(:, 3) - pos(:, 3);
+%     u_goal_3 = x_goal_rel_3 / norm(x_goal_rel_3);
+%     vg_xy_3 = (p_swarm.v_ref * u_goal_3)';
+%     vel_matrix_3 = [time, dist_mat(3, :), vel_command(1, 3), vel_rep(1, 3), vel_fric(1, 3), vel_obs(1, 3), vg_xy_3(1)];
+%     writematrix(vel_matrix_3,'vel_3.csv','Delimiter',',', 'WriteMode','append');
+%     
+%     % time; neighbor_dist; vx_cmd; vx_rep; vx_fric; vx_obs; vx_g
+%     x_goal_rel_4 = p_swarm.x_goal(:, 4) - pos(:, 4);
+%     u_goal_4 = x_goal_rel_4 / norm(x_goal_rel_4);
+%     vg_xy_4 = (p_swarm.v_ref * u_goal_4)';
+%     vel_matrix_4 = [time, dist_mat(4, :), vel_command(1, 4), vel_rep(1, 4), vel_fric(1, 4), vel_obs(1, 4), vg_xy_4(1)];
+%     writematrix(vel_matrix_4,'vel_4.csv','Delimiter',',', 'WriteMode','append');
+%     
     
 %     vel_rep_xy = vel_rep(:, 2)';
 %     vel_fric_xy = vel_fric(:, 2)';
