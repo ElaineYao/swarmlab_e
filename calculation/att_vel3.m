@@ -6,7 +6,7 @@ syms delta_y
 % vars
 num_agents = 3;
 
-M = readmatrix('/media/EDrive/swarmlab_e/vel_1_cal.csv');
+M = readmatrix('~/swarmlab_e/vel_1_cal.csv');
 m_size = size(M);
 row = m_size(1,1);
 % 1st drone - target drone; 2nd drone - attacked drone
@@ -98,13 +98,10 @@ for row_idx = 150:150
     x3 = pos_mat(1,3);
     y1 = pos_mat(2,1);
     y3 = pos_mat(2,3);
-    x4 = pos_mat(1,4);
-    y4 = pos_mat(2,4);
     x2 = pos_mat(1,2);
     y2 = pos_mat(2,2);
-    vx = vx_g + vx_o + (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(x1 - x3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(x1 - x4) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_x - x1 + x2);
- 
-    vy = vy_g + vy_o + (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(y1 - y3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(y1 - y4) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_y - y1 + y2);
+    vx = vx_g + vx_o + (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(x1 - x3) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_x - x1 + x2);
+    vy = vy_g + vy_o + (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(y1 - y3) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_y - y1 + y2);
 % 
 %     v_mat = [vx, vy];
 % ------------
@@ -116,11 +113,12 @@ for row_idx = 150:150
 %     vx_rel4 = -(3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(x1 - x4);
     
 %     vx_rel = vx_rel2 + vx_rel3 + vx_rel4;
-    vx_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(x1 - x3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(x1 - x4) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_x - x1 + x2);
+    vx_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(x1 - x3) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_x - x1 + x2);
     % solve vy_rel = 0
-    delta_y = linspace(-10,0,2000);
-    vy_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(y1 - y3) + (3/(4*((x1 - x4)^2 + (y1 - y4)^2)^(1/2)) - 3/100)*(y1 - y4) - (3./(4.*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2).^2).^(1/2)) - 3/100).*(delta_y - y1 + y2);
-    plot( delta_y, vy_rel);
+%     delta_y = linspace(-10,0,2000);
+    delta_y = 0;
+    vy_rel = (3/(4*((x1 - x3)^2 + (y1 - y3)^2)^(1/2)) - 3/100)*(y1 - y3) - (3/(4*((delta_x - x1 + x2)^2 + (delta_y - y1 + y2)^2)^(1/2)) - 3/100)*(delta_y - y1 + y2)
+%     plot( delta_y, vy_rel);
     
     
 %     v_mat = [vx vy vx_rel vy_rel vo' vg'];
