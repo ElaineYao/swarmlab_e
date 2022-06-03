@@ -36,6 +36,10 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_obs = zeros(3, nb_agents);      % Obstacle repulsion velocity  3*5 double
     vel_command = zeros(3, nb_agents);  % Total commanded velocity  3*5 double
     
+    % Elaine initialization
+    temp_vel_rep = zeros(2,1);
+    vel_y_rep = zeros(1, 3, 3);
+    
     nb_agent_collisions = 0; % Nb of collisions among agents  
     nb_obs_collisions = 0; % Nb of collisions against obstacles
     min_dist_obs = 20; % Minimal distance between any agent and the obstacle. Set it to a relatively high value in the beginning
@@ -157,9 +161,19 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
                     % overall vel_rep is the sum of resulted velocity with
                     % all other agents(dist), I think the x,y shows the
                     % direction of v. It depends on the dist in x&y axis
+                    
+                    % Elaine - extra vel_y_cal
+                    temp_vel_rep = p_swarm.p_rep * (p_swarm.r0_rep - dist(agent2)) * p_rel_u(:, agent2);
+                    vel_y_rep(:, agent2, agent) = temp_vel_rep(2);
+                    
                     vel_rep(:, agent) = vel_rep(:, agent) + ...
                         p_swarm.p_rep * (p_swarm.r0_rep - dist(agent2)) * p_rel_u(:, agent2);
                 else  % attraction
+                    
+                    % Elaine - extra vel_y_cal
+                    temp_vel_rep = p_swarm.p_rep * (p_swarm.r0_rep - dist(agent2)) * p_rel_u(:, agent2);
+                    vel_y_rep(:, agent2, agent) = temp_vel_rep(2);
+                    
                     % if > 25 then attraction
                     vel_rep(:, agent) = vel_rep(:, agent) + ...
                         p_swarm.p_rep * (dist(agent2) - p_swarm.r0_rep) *- p_rel_u(:, agent2);
@@ -379,9 +393,12 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, v_rel_norm_1(2), sqrt(sum(((vel_command_xy_1(1:2) - vel_xy_1(1:2))./dt).^2, 1)) ,vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_matrix_1,'vel_1-1.csv','Delimiter',',', 'WriteMode','append');
     
-%     vel_cal_mat_1 = [time, pos(1:2,1)', pos(1:2,2)', pos(1:2,3)', pos(1:2,4)', vel(1:2,1)', vel(1:2,2)', vel(1:2,3)', vel(1:2,4)', vel_obs_xy_1(1:2), vg_xy_1(1:2)];
-%     writematrix(vel_cal_mat_1,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
-        
+    vel_cal_mat_1 = [time, pos(1:2,1)', pos(1:2,2)', pos(1:2,3)', vel(1:2,1)', vel(1:2,2)', vel(1:2,3)', vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    writematrix(vel_cal_mat_1,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
+    
+    %     time, v_cmd, v_rep, 
+    vel_y_mat_1 = [time, vel_command(2, 1), vel_rep(2, 1), vel_y_rep(1,2,1), vel_y_rep(1,3,1), vel_fric(2, 1), vel_obs(2, 1), vg_xy_1(2)];
+    writematrix(vel_y_mat_1,'vel_y_mat_1.csv','Delimiter',',', 'WriteMode','append');
     % Recalculate the distance
 %     pos_real = pos;
 %     pos_real(1:2,2) = pos_real(1:2,2) - [2;0];
