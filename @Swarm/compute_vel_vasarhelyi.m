@@ -79,6 +79,15 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 %         end
         
 %         ----- Expe 4: GPS attack end -------
+
+%         ----- Expe 5: GPS attack start -------
+        if (time > 0.1) && (time <8)
+            pos(1:2,3) = pos(1:2,3) + [0;-13];
+        end
+        if (time >=8)
+            pos(1:2,2) = pos(1:2,2) + [0;-25];
+        end
+%         ----- Expe 5: GPS attack end -------
     
     for agent = 1:nb_agents
         
