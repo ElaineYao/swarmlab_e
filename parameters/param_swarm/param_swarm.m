@@ -137,7 +137,9 @@ rng(p_swarm.seed);
 
 % Set the goal
 % Front setting ----
-p_swarm.x_goal = [110 110 110;160 160 160;-38 -38 -38];
+goal_y = 164.5;
+goal_x = 180;
+p_swarm.x_goal = [goal_x goal_x goal_x;goal_y goal_y goal_y;-38 -38 -38];
 % p_swarm.x_goal = [80 80; 150 150 ; -38 -38];
 
 
@@ -171,11 +173,11 @@ p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
 bx = 5;
 px = -18.75-bx; % 5
 % dx = 10+18.5;
-dx = 5; % should > 38.75+5
-dy = 20;
+dx = 80; % should > 38.75+5
+dy = 25;
 
 % p_swarm.Pos0 = [px (px+dx) (px+dx_2) (px+dx_2) (px+dx_3); 150 (150+dy_2) (150-dy_2) (150+dy_2) (150+dy_2); -38 -38 -38 -38 -38];
-p_swarm.Pos0 = [px px px; 150 (150-dy) (150+dy); -38 -38 -38];
+p_swarm.Pos0 = [px (px+dx) (px+dx); 150 (150-dy-30) (150+dy); -38 -38 -38];
 % ------ Four drones setting end-------
 
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);
