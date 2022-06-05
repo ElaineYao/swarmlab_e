@@ -277,7 +277,7 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 
             for obs = 1:p_swarm.n_cyl % 14 n_cyl
                 % Get obstacle center and radius
-                c_obs = p_swarm.cylinders(1:2, obs); % e.g., c_obs = [37.5; 37.5]
+                c_obs = p_swarm.cylinders(1:2, obs); % e.g., c_obs = [0;150]
                 r_obs = p_swarm.cylinders(3, obs); % e.g., r_obs = 18.75
 
                 % Compute distance agent(a)-obstacle(b)
