@@ -403,8 +403,11 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 %     accel_cmd = (vel_command-vel)./dt;
 %         accel_cmd_norm = sqrt(sum(accel_cmd.^2, 1));
     % (vx_cmd, vy_cmd) Col 10, Col 11
-    vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, v_rel_norm_1(2), sqrt(sum(((vel_command_xy_1(1:2) - vel_xy_1(1:2))./dt).^2, 1)) ,vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
-    writematrix(vel_matrix_1,'vel_1-1.csv','Delimiter',',', 'WriteMode','append');
+%     vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, v_rel_norm_1(2), sqrt(sum(((vel_command_xy_1(1:2) - vel_xy_1(1:2))./dt).^2, 1)) ,vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
+    if (time >=20)
+        vel_matrix_1 = [time, vel_command(1:2,1)', vel_rep(1:2,1)', vel_fric(1:2,1)', vel_obs(1:2,1)', vg_xy_1(1:2)];
+        writematrix(vel_matrix_1,'vel_1_xy.csv','Delimiter',',', 'WriteMode','append');
+    end
     
     vel_cal_mat_1 = [time, pos(1:2,1)', pos(1:2,2)', pos(1:2,3)', vel(1:2,1)', vel(1:2,2)', vel(1:2,3)', vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_cal_mat_1,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
