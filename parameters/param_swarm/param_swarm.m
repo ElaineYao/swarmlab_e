@@ -173,7 +173,7 @@ p_swarm.Pos0 = p_swarm.P0 + p_swarm.P * init_pos;
 bx = 5;
 px = -18.75-bx; % 5
 % dx = 10+18.5;
-dx = 80; % should > 38.75+5
+dx = 70; % should > 38.75+5
 dy = 25;
 
 % p_swarm.Pos0 = [px (px+dx) (px+dx_2) (px+dx_2) (px+dx_3); 150 (150+dy_2) (150-dy_2) (150+dy_2) (150+dy_2); -38 -38 -38 -38 -38];
