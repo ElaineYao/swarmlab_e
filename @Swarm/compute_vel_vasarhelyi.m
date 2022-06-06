@@ -404,16 +404,16 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
 %         accel_cmd_norm = sqrt(sum(accel_cmd.^2, 1));
     % (vx_cmd, vy_cmd) Col 10, Col 11
 %     vel_matrix_1 = [time, vel_theta_1, vel_val_1, dist_ab_1, v_rel_norm_1(2), sqrt(sum(((vel_command_xy_1(1:2) - vel_xy_1(1:2))./dt).^2, 1)) ,vel_xy_1(1:2), vel_command_xy_1(1:2),vel_rep_xy_1(1:2), vel_fric_xy_1(1:2), vel_obs_xy_1(1:2), vg_xy_1(1:2)];
-    if (time >=20)
-        vel_matrix_1 = [time, vel_command(1:2,1)', vel_rep(1:2,1)', vel_fric(1:2,1)', vel_obs(1:2,1)', vg_xy_1(1:2)];
-        writematrix(vel_matrix_1,'vel_1_xy.csv','Delimiter',',', 'WriteMode','append');
-    end
+%     if (time >=0)
+    vel_matrix_1 = [time, vel_command(1:2,1)', vel_rep(1:2,1)', vel_fric(1:2,1)', vel_obs(1:2,1)', vg_xy_1(1:2)];
+    writematrix(vel_matrix_1,'vel_1_xy.csv','Delimiter',',', 'WriteMode','append');
+%     end
     
     vel_cal_mat_1 = [time, pos(1:2,1)', pos(1:2,2)', pos(1:2,3)', vel(1:2,1)', vel(1:2,2)', vel(1:2,3)', vel_obs_xy_1(1:2), vg_xy_1(1:2)];
     writematrix(vel_cal_mat_1,'vel_1_cal.csv','Delimiter',',', 'WriteMode','append');
     
     %     time, v_cmd, v_rep, 
-    vel_y_mat_1 = [time, vel_command(2, 1), vel_rep(2, 1), vel_y_rep(1,2,1), vel_y_rep(1,3,1), vel_fric(2, 1), vel_obs(2, 1), vg_xy_1(2)];
+    vel_y_mat_1 = [time, vel_command(2, 1), vel_rep(2, 1), vel_y_rep(1,2,1), vel_y_rep(1,3,1), vel_fric(2, 1), vel_obs(2, 1), vg_xy_1(1:2)];
     writematrix(vel_y_mat_1,'vel_y_mat_1.csv','Delimiter',',', 'WriteMode','append');
     % Recalculate the distance
 %     pos_real = pos;
@@ -429,14 +429,14 @@ function [vel_command, collisions] = compute_vel_vasarhelyi(self, p_swarm, r_age
     x_goal_rel_1 = p_swarm.x_goal(:, 1) - pos(:, 1);
     u_goal_1 = x_goal_rel_1 / norm(x_goal_rel_1);
     vg_xy_1 = (p_swarm.v_ref * u_goal_1)';
-    vel_matrix_1 = [time, dist_mat(1, :), vel_command(1, 1), vel_rep(1, 1), vel_fric(1, 1), vel_obs(1, 1), vg_xy_1(1)];
+    vel_matrix_1 = [time, dist_mat(1, :), vel_command(1, 1), vel_rep(1, 1), vel_fric(1, 1), vel_obs(1, 1), vg_xy_1(2), vg_xy_1(1)];
     writematrix(vel_matrix_1,'vel_1.csv','Delimiter',',', 'WriteMode','append');
     
     % time; neighbor_dist; vx_cmd; vx_rep; vx_fric; vx_obs; vx_g
     x_goal_rel_2 = p_swarm.x_goal(:, 2) - pos(:, 2);
     u_goal_2 = x_goal_rel_2 / norm(x_goal_rel_2);
     vg_xy_2 = (p_swarm.v_ref * u_goal_2)';
-    vel_matrix_2 = [time, dist_mat(2, :), vel_command(1, 2), vel_rep(1, 2), vel_fric(1, 2), vel_obs(1, 2), vg_xy_2(1)];
+    vel_matrix_2 = [time, dist_mat(2, :), vel_command(1, 2), vel_rep(1, 2), vel_fric(1, 2), vel_obs(1, 2), vg_xy_2(2), vg_xy_2(1)];
     writematrix(vel_matrix_2,'vel_2.csv','Delimiter',',', 'WriteMode','append');
     
 %     % time; neighbor_dist; vx_cmd; vx_rep; vx_fric; vx_obs; vx_g

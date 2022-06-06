@@ -129,8 +129,8 @@ x = zeros(1);
 y = zeros(1);
 % rows = 2;
 unit_v = 1;
-for i =1:rows
-    max_v = max(abs(N(i,2:end)));
+start = 2500;
+for i =start:rows
     % for vel_cmd
 %     x(2*i-1) = unit_v*(i-1); % vector start
 %     x(2*i) = (M(i,2)/max_v)*unit_v;
@@ -139,15 +139,15 @@ for i =1:rows
 %     vector_x =[x(2*i-1), x(2*i)];
 %     vector_y =[y(2*i-1), y(2*i)];
     
-    x_start = M(i+2000,3); % vector start
-    x(2*i) = (N(i,2)/max_v)*unit_v;
-    y_start = M(i+2000,2);
-    y(2*i) = (N(i,3)/max_v)*unit_v;
+    x_start = M(i,3); % vector start
+    y_start = M(i,2);
     rate = 1;
     
     plot(obs_x, obs_y);
     hold on
-    plot([x_start, x_start+N(i,2)/rate], [y_start, y_start+N(i,3)/rate], [x_start, x_start+N(i,4)/rate], [y_start, y_start+N(i,5)/rate], [x_start, x_start+N(i,6)/rate], [y_start, y_start+N(i,7)/rate], [x_start, x_start+N(i,8)/rate], [y_start, y_start+N(i,9)/rate], [x_start, x_start+N(i,10)/rate], [y_start, y_start+N(i,11)/rate]);
+    plot([x_start, x_start+N(i,3)/rate], [y_start, y_start+N(i,2)/rate], [x_start, x_start+N(i,5)/rate], [y_start, y_start+N(i,4)/rate], [x_start, x_start+N(i,7)/rate], [y_start, y_start+N(i,6)/rate], [x_start, x_start+N(i,9)/rate], [y_start, y_start+N(i,8)/rate], [x_start, x_start+N(i,11)/rate], [y_start, y_start+N(i,10)/rate]);
+%     disp(N(i,2)/rate)
+%     disp(N(i,3)/rate)
     hold off
     legend("obstacle","v_{cmd}","v_{rep}", "v_{fric}", "v_{obs}", "v_{g}")
     
