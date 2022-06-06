@@ -129,7 +129,7 @@ x = zeros(1);
 y = zeros(1);
 % rows = 2;
 unit_v = 1;
-start = 2500;
+start = 2100;
 for i =start:rows
     % for vel_cmd
 %     x(2*i-1) = unit_v*(i-1); % vector start
@@ -142,18 +142,27 @@ for i =start:rows
     x_start = M(i,3); % vector start
     y_start = M(i,2);
     rate = 1;
-    
+    k = N(i,2)/N(i,3);
+    if k>0
+        x_dot = x_start+ linspace(0,20);
+        y_dot = y_start+ k.*linspace(0,20);
+    elseif k <=0
+        x_dot = x_start+ linspace(-20,0);
+        y_dot = y_start+ k.*linspace(-20,0);
+    end
+    plot(x_dot, y_dot, ':')
+    hold on
     plot(obs_x, obs_y);
     hold on
     plot([x_start, x_start+N(i,3)/rate], [y_start, y_start+N(i,2)/rate], [x_start, x_start+N(i,5)/rate], [y_start, y_start+N(i,4)/rate], [x_start, x_start+N(i,7)/rate], [y_start, y_start+N(i,6)/rate], [x_start, x_start+N(i,9)/rate], [y_start, y_start+N(i,8)/rate], [x_start, x_start+N(i,11)/rate], [y_start, y_start+N(i,10)/rate]);
 %     disp(N(i,2)/rate)
 %     disp(N(i,3)/rate)
     hold off
-    legend("obstacle","v_{cmd}","v_{rep}", "v_{fric}", "v_{obs}", "v_{g}")
+    legend("prolonged", "obstacle","v_{cmd}","v_{rep}", "v_{fric}", "v_{obs}", "v_{g}")
     
     haha = 0;
-    
 end
+
 
 
 
