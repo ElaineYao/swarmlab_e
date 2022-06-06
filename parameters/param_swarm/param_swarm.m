@@ -132,7 +132,7 @@ p_swarm.V0 = [0,0,0]'; % [m/s]
 p_swarm.V = 0; % [m/s]
 
 % Seed to avoid random effects
-p_swarm.seed = 5;
+p_swarm.seed = 10;
 rng(p_swarm.seed);
 
 % Set the goal
@@ -176,8 +176,28 @@ px = -18.75-bx; % 5
 dx = 80; % should > 38.75+5
 dy = 35;
 
+% for red drone, x=(-18.75-10, -18.75-3), y=(131.25, 168.75)
+rx = -28.75+7*rand(1);
+ry = 131.25+37.5*rand(1);
+
+while (abs(rx-0)<5*abs(ry-150))
+    rx = -28.75+7*rand(1);
+    ry = 131.25+37.5*rand(1);
+end
+    
+
+% for blue drone, x=(-18.75+5, -18.75+90), y=(150-60, 131.25-5)
+bx = -13.75+85*rand(1);
+by = 90+36.25*rand(1);
+
+% for brown drone, x=(-18.75+5, -18.75+90), y = (168.75+5, 150+60)
+wx = -13.75+85*rand(1);
+wy = 173.75+36.25*rand(1);
+
 % p_swarm.Pos0 = [px (px+dx) (px+dx_2) (px+dx_2) (px+dx_3); 150 (150+dy_2) (150-dy_2) (150+dy_2) (150+dy_2); -38 -38 -38 -38 -38];
-p_swarm.Pos0 = [px (px+dx) (px+dx); 150 (150-25-dy) (150+25); -38 -38 -38];
+p_swarm.Pos0 = [rx bx wx; ry by wy; -38 -38 -38];
+pos_matrix = [rx ry; bx by;wx wy];
+disp(pos_matrix)
 % ------ Four drones setting end-------
 
 p_swarm.Vel0 = p_swarm.V0 + p_swarm.V * rand(3,p_swarm.nb_agents);

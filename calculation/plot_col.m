@@ -65,3 +65,15 @@ legend('v_{cmd}','v_{rel}', 'v_{fric}', 'v_{o}', 'v_{g}')
 % 
 % legend('drone 1');
 
+%% Plot two vy_rel
+% M = readmatrix('/media/EDrive/swarmlab_e/vel_y_mat_1.csv');
+% N = readmatrix('/media/EDrive/swarmlab_e/vel_y_mat_1_brown.csv');
+% 
+% x1 = M(:, 1);
+% y1 = M(:, 2);
+% x2 = N(:, 1);
+% y2 = N(:, 2);
+% 
+% plot(x1, y1, x2, y2);
+% hold off
+% legend("blue", "brown")
