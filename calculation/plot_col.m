@@ -1,44 +1,44 @@
 %% Plot velocity
 
-% M = readmatrix('/media/EDrive/swarmlab_e/vel_y_mat_1.csv');
-% v_cmd = 2;
-% v_rel = 3;
-% v_rel1 = 4;
-% v_rel2 = 5;
-% v_fric = 6;
-% v_o = 7;
-% v_g = 8;
-% 
-% start = 1;
-% % end_r = 1550;
-% [end_r,] = size(M);
-% x = M(start:end_r,1);
-% 
-% figure
-% % plot(x, M(start:end_r,v_rel), x, M(start:end_r,v_fric), x, M(start:end_r,v_o), x, M(start:end_r,v_g));
-% % 
-% % hold off
-% % legend('v_{rel}', 'v_{fric}', 'v_{o}', 'v_{g}')
-% 
-% % plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel));
-% % 
-% % hold off
-% % legend('v_{cmd}', 'v_{rel}')
-% 
-% % plot(x, M(start:end_r,v_rel), x, M(start:end_r,v_rel1), x, M(start:end_r,v_rel2));
-% % 
-% % hold off
-% % legend('v_{rel}', 'v_{rel1}', 'v_{rel2}')
-% 
-% % plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel), x, M(start:end_r,v_rel1), x, M(start:end_r,v_rel2), x, M(start:end_r,v_fric), x, M(start:end_r,v_o), x, M(start:end_r,v_g));
-% % 
-% % hold off
-% % legend('v_{cmd}','v_{rel}', 'v_{rel1}', 'v_{rel2}', 'v_{fric}', 'v_{o}', 'v_{g}')
-% 
-% plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel), x, M(start:end_r,v_fric), x, M(start:end_r,v_o), x, M(start:end_r,v_g));
+M = readmatrix('/media/EDrive/swarmlab_e/vel_y_mat_1.csv');
+v_cmd = 2;
+v_rel = 3;
+v_rel1 = 4;
+v_rel2 = 5;
+v_fric = 6;
+v_o = 7;
+v_g = 8;
+
+start = 1;
+% end_r = 1550;
+[end_r,] = size(M);
+x = M(start:end_r,1);
+
+figure
+% plot(x, M(start:end_r,v_rel), x, M(start:end_r,v_fric), x, M(start:end_r,v_o), x, M(start:end_r,v_g));
 % 
 % hold off
-% legend('v_{cmd}','v_{rel}', 'v_{fric}', 'v_{o}', 'v_{g}')
+% legend('v_{rel}', 'v_{fric}', 'v_{o}', 'v_{g}')
+
+% plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel));
+% 
+% hold off
+% legend('v_{cmd}', 'v_{rel}')
+
+% plot(x, M(start:end_r,v_rel), x, M(start:end_r,v_rel1), x, M(start:end_r,v_rel2));
+% 
+% hold off
+% legend('v_{rel}', 'v_{rel1}', 'v_{rel2}')
+
+% plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel), x, M(start:end_r,v_rel1), x, M(start:end_r,v_rel2), x, M(start:end_r,v_fric), x, M(start:end_r,v_o), x, M(start:end_r,v_g));
+% 
+% hold off
+% legend('v_{cmd}','v_{rel}', 'v_{rel1}', 'v_{rel2}', 'v_{fric}', 'v_{o}', 'v_{g}')
+
+plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel), x, M(start:end_r,v_fric), x, M(start:end_r,v_o), x, M(start:end_r,v_g));
+
+hold off
+legend('v_{cmd}','v_{rel}', 'v_{fric}', 'v_{o}', 'v_{g}')
 
 %% Plot location
 
@@ -110,59 +110,59 @@
 
 
 %% Plot velocity and position along with the obstacle
-M = readmatrix('/media/EDrive/swarmlab_e/vel_1_cal.csv');
-
-obs_x = [150.0000  163.2583  168.7500  163.2583  150.0000  136.7417  131.2500  136.7417  150.0000 150.0000  163.2583  168.7500  163.2583  150.0000  136.7417  131.2500  136.7417  150.0000];
-obs_y = [18.7500   13.2583    0.0000  -13.2583  -18.7500  -13.2583   -0.0000   13.2583   18.7500 18.7500   13.2583    0.0000  -13.2583  -18.7500  -13.2583   -0.0000   13.2583   18.7500];
-
-
-% start = 1;
-% % end_r = 500;
-% [end_r,] = size(M);
-% pos_x = M(start:end_r,3);
-% pos_y = M(start:end_r,2);
-% plot(pos_x, pos_y);
-
-N = readmatrix("/media/EDrive/swarmlab_e/vel_1_xy.csv");
-[rows,] = size(M);
-x = zeros(1);
-y = zeros(1);
-% rows = 2;
-unit_v = 1;
-start = 2100;
-for i =start:rows
-    % for vel_cmd
-%     x(2*i-1) = unit_v*(i-1); % vector start
-%     x(2*i) = (M(i,2)/max_v)*unit_v;
-%     y(2*i-1) = unit_v*(i-1);
-%     y(2*i) = (M(i,3)/max_v)*unit_v;
-%     vector_x =[x(2*i-1), x(2*i)];
-%     vector_y =[y(2*i-1), y(2*i)];
-    
-    x_start = M(i,3); % vector start
-    y_start = M(i,2);
-    rate = 1;
-    k = N(i,2)/N(i,3);
-    if k>0
-        x_dot = x_start+ linspace(0,20);
-        y_dot = y_start+ k.*linspace(0,20);
-    elseif k <=0
-        x_dot = x_start+ linspace(-20,0);
-        y_dot = y_start+ k.*linspace(-20,0);
-    end
-    plot(x_dot, y_dot, ':')
-    hold on
-    plot(obs_x, obs_y);
-    hold on
-    plot([x_start, x_start+N(i,3)/rate], [y_start, y_start+N(i,2)/rate], [x_start, x_start+N(i,5)/rate], [y_start, y_start+N(i,4)/rate], [x_start, x_start+N(i,7)/rate], [y_start, y_start+N(i,6)/rate], [x_start, x_start+N(i,9)/rate], [y_start, y_start+N(i,8)/rate], [x_start, x_start+N(i,11)/rate], [y_start, y_start+N(i,10)/rate]);
-%     disp(N(i,2)/rate)
-%     disp(N(i,3)/rate)
-    hold off
-    legend("prolonged", "obstacle","v_{cmd}","v_{rep}", "v_{fric}", "v_{obs}", "v_{g}")
-    
-    haha = 0;
-end
-
-
+% M = readmatrix('/media/EDrive/swarmlab_e/vel_1_cal.csv');
+% 
+% obs_x = [150.0000  163.2583  168.7500  163.2583  150.0000  136.7417  131.2500  136.7417  150.0000 150.0000  163.2583  168.7500  163.2583  150.0000  136.7417  131.2500  136.7417  150.0000];
+% obs_y = [18.7500   13.2583    0.0000  -13.2583  -18.7500  -13.2583   -0.0000   13.2583   18.7500 18.7500   13.2583    0.0000  -13.2583  -18.7500  -13.2583   -0.0000   13.2583   18.7500];
+% 
+% 
+% % start = 1;
+% % % end_r = 500;
+% % [end_r,] = size(M);
+% % pos_x = M(start:end_r,3);
+% % pos_y = M(start:end_r,2);
+% % plot(pos_x, pos_y);
+% 
+% N = readmatrix("/media/EDrive/swarmlab_e/vel_1_xy.csv");
+% [rows,] = size(M);
+% x = zeros(1);
+% y = zeros(1);
+% % rows = 2;
+% unit_v = 1;
+% start = 2100;
+% for i =start:rows
+%     % for vel_cmd
+% %     x(2*i-1) = unit_v*(i-1); % vector start
+% %     x(2*i) = (M(i,2)/max_v)*unit_v;
+% %     y(2*i-1) = unit_v*(i-1);
+% %     y(2*i) = (M(i,3)/max_v)*unit_v;
+% %     vector_x =[x(2*i-1), x(2*i)];
+% %     vector_y =[y(2*i-1), y(2*i)];
+%     
+%     x_start = M(i,3); % vector start
+%     y_start = M(i,2);
+%     rate = 1;
+%     k = N(i,2)/N(i,3);
+%     if k>0
+%         x_dot = x_start+ linspace(0,20);
+%         y_dot = y_start+ k.*linspace(0,20);
+%     elseif k <=0
+%         x_dot = x_start+ linspace(-20,0);
+%         y_dot = y_start+ k.*linspace(-20,0);
+%     end
+%     plot(x_dot, y_dot, ':')
+%     hold on
+%     plot(obs_x, obs_y);
+%     hold on
+%     plot([x_start, x_start+N(i,3)/rate], [y_start, y_start+N(i,2)/rate], [x_start, x_start+N(i,5)/rate], [y_start, y_start+N(i,4)/rate], [x_start, x_start+N(i,7)/rate], [y_start, y_start+N(i,6)/rate], [x_start, x_start+N(i,9)/rate], [y_start, y_start+N(i,8)/rate], [x_start, x_start+N(i,11)/rate], [y_start, y_start+N(i,10)/rate]);
+% %     disp(N(i,2)/rate)
+% %     disp(N(i,3)/rate)
+%     hold off
+%     legend("prolonged", "obstacle","v_{cmd}","v_{rep}", "v_{fric}", "v_{obs}", "v_{g}")
+%     
+%     haha = 0;
+% end
+% 
+% 
 
 

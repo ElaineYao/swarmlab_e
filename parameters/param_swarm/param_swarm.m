@@ -132,7 +132,7 @@ p_swarm.V0 = [0,0,0]'; % [m/s]
 p_swarm.V = 0; % [m/s]
 
 % Seed to avoid random effects
-p_swarm.seed = 10;
+p_swarm.seed = 19;
 rng(p_swarm.seed);
 
 % Set the goal
