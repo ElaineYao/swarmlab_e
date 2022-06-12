@@ -7,7 +7,7 @@ v_rel1 = 4;
 v_rel2 = 5;
 v_fric = 6;
 v_o = 7;
-v_g = 8;
+v_g = 9;
 
 start = 1;
 % end_r = 1550;
@@ -39,6 +39,7 @@ plot(x, M(start:end_r,v_cmd), x, M(start:end_r,v_rel), x, M(start:end_r,v_fric),
 
 hold off
 legend('v_{cmd}','v_{rel}', 'v_{fric}', 'v_{o}', 'v_{g}')
+% legend('v_{cmd}','v_{rel}', 'v_{fric}', 'v_{o}')
 
 %% Plot location
 
